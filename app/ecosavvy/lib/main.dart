@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'defaultScreen.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -17,5 +16,4 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
     );
   }
-
 }
