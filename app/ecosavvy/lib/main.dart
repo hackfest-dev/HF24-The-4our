@@ -1,7 +1,5 @@
+import 'package:ecosavvy/loginScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/AccountPage.dart';
-import 'package:researchear/HomePage.dart';
-import 'package:researchear/loginScreen.dart';
 
 void main() => runApp(MyApp());
 

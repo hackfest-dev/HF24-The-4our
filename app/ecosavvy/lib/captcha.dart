@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:researchear/DefaultScreen.dart'; // Import your home screen or any other screen
+import 'package:ecosavvy/defaultScreen.dart';
+import 'package:flutter/material.dart'; // Import your home screen or any other screen
 
 class CaptchaScreen extends StatefulWidget {
   @override

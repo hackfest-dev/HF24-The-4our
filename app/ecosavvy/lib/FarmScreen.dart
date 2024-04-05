@@ -60,7 +60,8 @@ class _FarmScreenState extends State<FarmScreen> {
                     majorGridLines: MajorGridLines(width: 0),
                     labelIntersectAction: _selectedTimeOption == '1D'
                         ? AxisLabelIntersectAction.rotate45
-                        : AxisLabelIntersectAction.none, // Rotate labels for 1D option
+                        : AxisLabelIntersectAction
+                            .none, // Rotate labels for 1D option
                     labelPlacement: LabelPlacement.onTicks,
                     interval: _primaryXAxisLabelInterval,
                     labelStyle: TextStyle(fontSize: 12),
@@ -99,7 +100,8 @@ class _FarmScreenState extends State<FarmScreen> {
                         primary: _selectedTimeOption == option
                             ? Colors.lightGreen
                             : Colors.grey, // Change color based on selection
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                       ),
                       child: Text(
                         option,
@@ -139,7 +141,8 @@ class _FarmScreenState extends State<FarmScreen> {
       for (var item in rawData) {
         data.add(TimeSeriesData(
           item['timestamp'], // Use 'timestamp' field as time
-          double.parse(item['energyGeneratedKilowattHours'].toString()), // Parse energyGeneratedKilowattHours to double
+          double.parse(item['energyGeneratedKilowattHours']
+              .toString()), // Parse energyGeneratedKilowattHours to double
         ));
       }
 
@@ -158,7 +161,8 @@ class _FarmScreenState extends State<FarmScreen> {
 
   // Function to update maximum Y value based on chart data
   void _updateMaxYValue(List<TimeSeriesData> data) {
-    double max = data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
+    double max =
+        data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
     setState(() {
       _maxYValue = max;
     });

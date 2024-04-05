@@ -1,5 +1,5 @@
+import 'package:ecosavvy/defaultScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/DefaultScreen.dart';
 
 class OtpPage extends StatefulWidget {
   @override

@@ -16,16 +16,23 @@ class _PortfolioPageState extends State<PortfolioPage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Color(0xff252525),
-        leading: Icon(Icons.calculate_outlined, size: 27,),
-        title: Text("Your Investments", textAlign: TextAlign.center, style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w700
-        ),),
+        leading: Icon(
+          Icons.calculate_outlined,
+          size: 27,
+        ),
+        title: Text(
+          "Your Investments",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 20, color: Colors.white, fontWeight: FontWeight.w700),
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.all(10.0),
-            child: Icon(Icons.search_rounded, size: 27,),
+            child: Icon(
+              Icons.search_rounded,
+              size: 27,
+            ),
           )
         ],
         centerTitle: true,

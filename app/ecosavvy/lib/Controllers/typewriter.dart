@@ -10,7 +10,8 @@ class Typewriter extends StatefulWidget {
   _TypewriterState createState() => _TypewriterState();
 }
 
-class _TypewriterState extends State<Typewriter> with SingleTickerProviderStateMixin {
+class _TypewriterState extends State<Typewriter>
+    with SingleTickerProviderStateMixin {
   late String currentText;
   late String nextText;
   String displayedText = '';
@@ -65,20 +66,24 @@ class _TypewriterState extends State<Typewriter> with SingleTickerProviderStateM
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(displayedText,
+        Text(
+          displayedText,
           style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 22
-          ),),
+              color: Colors.white, fontWeight: FontWeight.w600, fontSize: 22),
+        ),
         AnimatedBuilder(
           animation: _cursorController,
           builder: (BuildContext context, Widget? child) {
-            return _cursorController.value < 0.5 ? Container(
-              height: 20.0, // Adjust height as needed
-              width: 8.0,   // Adjust the width for thickness
-              color: Colors.white,
-            ) : SizedBox(width: 8.0, height: 20.0); // Adjust the size of the SizedBox to match the cursor width
+            return _cursorController.value < 0.5
+                ? Container(
+                    height: 20.0, // Adjust height as needed
+                    width: 8.0, // Adjust the width for thickness
+                    color: Colors.white,
+                  )
+                : SizedBox(
+                    width: 8.0,
+                    height:
+                        20.0); // Adjust the size of the SizedBox to match the cursor width
           },
         ),
       ],

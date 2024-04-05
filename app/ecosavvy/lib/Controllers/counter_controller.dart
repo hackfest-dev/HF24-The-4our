@@ -7,6 +7,6 @@ class CounterController extends ChangeNotifier {
 
   void increment() {
     _count++;
-    notifyListeners();  // Notify listeners when the value changes
+    notifyListeners(); // Notify listeners when the value changes
   }
 }

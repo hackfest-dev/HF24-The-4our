@@ -1,5 +1,5 @@
+import 'package:ecosavvy/captcha.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/captcha.dart';
 
 class MyPageView extends StatefulWidget {
   @override

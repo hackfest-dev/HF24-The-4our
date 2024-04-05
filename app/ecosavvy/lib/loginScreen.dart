@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:ecosavvy/Phone_no.dart';
+import 'package:ecosavvy/SignupScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/Phone_no.dart';
-import 'package:researchear/SignupScreen.dart';
 import 'package:sensors/sensors.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,5 +1,5 @@
+import 'package:ecosavvy/otp_page.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/otp_page.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   @override
