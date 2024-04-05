@@ -1,7 +1,7 @@
+import 'package:ecosavvy/Account/about_us.dart';
+import 'package:ecosavvy/Account/help_center.dart';
+import 'package:ecosavvy/Account/legal_a.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/Account/about_us.dart';
-import 'package:researchear/Account/help_center.dart';
-import 'package:researchear/Account/legal_a.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
