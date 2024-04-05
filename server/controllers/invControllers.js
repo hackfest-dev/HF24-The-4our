@@ -1,0 +1,157 @@
+const Investor = require("../models/InvestorSchema");
+const Farm = require("../models/FarmsSchema");
+const { v4: uuidv4 } = require("uuid");
+const {
+  hashPassword,
+  comparePassword,
+  generateToken,
+} = require("../middlewares/authorization");
+
+const invSignUp = async (req, res, next) => {
+  try {
+    const {
+      name,
+      email,
+      password,
+      phoneNumber,
+      permanentAddress,
+      aadharNumber,
+      panNumber,
+      dateOfBirth,
+      nomineeDetails,
+    } = req.body;
+
+    // Generate a unique random ID for the investor
+    const investorID = uuidv4();
+    const hashedpass = await hashPassword(password);
+    const KYCDone = false;
+
+    const existingInvestor = await Investor.findOne({
+      $or: [{ email }, { phoneNumber }, { aadharNumber }, { panNumber }],
+    });
+
+    if (existingInvestor) {
+      return res
+        .status(400)
+        .json({ error: "Investor with provided details already exists." });
+    }
+
+    // Create a new investor document with the generated investorID
+    const newInvestor = new Investor({
+      investorID,
+      name,
+      email,
+      password: hashedpass,
+      phoneNumber,
+      permanentAddress,
+      aadharNumber,
+      panNumber,
+      dateOfBirth,
+      KYCDone,
+      nomineeDetails,
+    });
+
+    // Save the investor document to the database
+    await newInvestor.save();
+
+    token = await generateToken({
+      type: "investor",
+      investorID: investorID,
+    });
+
+    res
+      .status(201)
+      .json({ message: "Investor signed up successfully.", token: token });
+  } catch (error) {
+    // Handle errors
+    console.error("Error in sign up:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const investInFarm = async (req, res) => {
+  try {
+    const { aadharNumber, farmId, noOfShares, transactionID } = req.body;
+
+    const farm = await Farm.findOne({ farmID: farmId });
+
+    if (!farm) {
+      return res.status(404).json({ error: "Farm not found" });
+    }
+
+    const orgId = farm.orgId;
+    const sharePrice = farm.eachSharePrice;
+    const timestamp = Date.now();
+
+    // Check if the investor has already invested in the farm
+    const existingInvestment = await investorToFarmSchema.findOne({
+      aadharNumber,
+      farmID: farmId,
+    });
+
+    const newInvestment = new investorToFarmSchema({
+      aadharNumber,
+      farmID: farmId,
+      orgId: orgId,
+      noOfShares,
+      sharePrice: sharePrice,
+      transactionID,
+      returns: 0,
+      timestamp,
+    });
+    await newInvestment.save();
+
+    if (!existingInvestment) {
+      // Increase the totalInvestors count in the farm schema
+      await Farm.findOneAndUpdate(
+        { farmID: farmId },
+        { $inc: { totalInvestors: 1 } }
+      );
+    }
+
+    // Decrease the available shares in the farm schema
+    await Farm.findOneAndUpdate(
+      { farmID: farmId },
+      { $inc: { availableShares: -noOfShares } }
+    );
+
+    res.status(200).json({ message: "Investment successful." });
+  } catch (error) {
+    console.error("Error in investing:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const invLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find the investor by email
+    const investor = await Investor.findOne({ email });
+
+    if (!investor) {
+      return res.status(404).json({ error: "Investor not found" });
+    }
+
+    // Compare passwords
+    const isPasswordMatch = await comparePassword(password, investor.password);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const token = await generateToken({
+      type: "investor",
+      investorID: investor.investorID,
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    // Handle errors
+    console.error("Error in login:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { invSignUp, investInFarm, invLogin };
