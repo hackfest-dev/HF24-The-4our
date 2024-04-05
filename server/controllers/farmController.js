@@ -120,6 +120,8 @@ const storeReturnsData = async (req, res, next) => {
     // Save the returns document to the database
     await newReturn.save();
 
+    updateInvestorReturns();
+
     res.status(201).json({ message: "Returns data stored successfully." });
   } catch (error) {
     // Handle errors

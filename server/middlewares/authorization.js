@@ -7,11 +7,33 @@ const generateToken = (payload) => {
 };
 
 // Verify JWT token
-const verifyToken = (token) => {
+const verifyToken = (req, res, next) => {
+  // Extract token from request headers, query parameters, or cookies
+  const token = req.headers.authorization.split(" ")[1];
+
+  // Check if token exists
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    // Verify the token
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Check the token type
+    if (decodedToken.type === "investor") {
+      // If token type is investor, add aadharNumber to req.body
+      req.body.aadharNumber = decodedToken.aadharNumber;
+    } else if (decodedToken.type === "org") {
+      // If token type is org, add orgID to req.body
+      req.body.orgID = decodedToken.orgID;
+    }
+
+    // Call next middleware
+    next();
   } catch (error) {
-    return null; // Token verification failed
+    // Token verification failed
+    return res.status(401).json({ error: "Unauthorized" });
   }
 };
 

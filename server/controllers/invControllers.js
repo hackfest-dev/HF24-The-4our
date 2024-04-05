@@ -1,5 +1,7 @@
 const Investor = require("../models/InvestorSchema");
 const Farm = require("../models/FarmsSchema");
+const InvestorToFarm = require("../models/investorToFarmSchema");
+const Org = require("../models/OrgSchema");
 const { v4: uuidv4 } = require("uuid");
 const {
   hashPassword,
@@ -56,7 +58,7 @@ const invSignUp = async (req, res, next) => {
 
     token = await generateToken({
       type: "investor",
-      investorID: investorID,
+      aadharNumber: aadharNumber,
     });
 
     res
@@ -71,9 +73,11 @@ const invSignUp = async (req, res, next) => {
 
 const investInFarm = async (req, res) => {
   try {
-    const { aadharNumber, farmId, noOfShares, transactionID } = req.body;
+    const { aadharNumber, farmId, noOfShares, transactionID, timestamp } =
+      req.body;
 
     const farm = await Farm.findOne({ farmID: farmId });
+    const parsedTimestamp = new Date(timestamp);
 
     if (!farm) {
       return res.status(404).json({ error: "Farm not found" });
@@ -81,15 +85,14 @@ const investInFarm = async (req, res) => {
 
     const orgId = farm.orgId;
     const sharePrice = farm.eachSharePrice;
-    const timestamp = Date.now();
 
     // Check if the investor has already invested in the farm
-    const existingInvestment = await investorToFarmSchema.findOne({
+    const existingInvestment = await InvestorToFarm.findOne({
       aadharNumber,
       farmID: farmId,
     });
 
-    const newInvestment = new investorToFarmSchema({
+    const newInvestment = new InvestorToFarm({
       aadharNumber,
       farmID: farmId,
       orgId: orgId,
@@ -97,7 +100,7 @@ const investInFarm = async (req, res) => {
       sharePrice: sharePrice,
       transactionID,
       returns: 0,
-      timestamp,
+      timestamp: parsedTimestamp,
     });
     await newInvestment.save();
 
@@ -143,7 +146,7 @@ const invLogin = async (req, res, next) => {
     // Generate JWT token
     const token = await generateToken({
       type: "investor",
-      investorID: investor.investorID,
+      aadharNumber: investor.aadharNumber,
     });
 
     res.status(200).json({ token });
@@ -154,4 +157,55 @@ const invLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { invSignUp, investInFarm, invLogin };
+const fetchPortfolio = async (req, res, next) => {
+  try {
+    // Parse Aadhar number from request parameters
+    const { aadharNumber } = req.body;
+
+    // Find investments made by the investor based on Aadhar number
+    const investments = await InvestorToFarm.find({ aadharNumber });
+
+    // Initialize an array to store portfolio details
+    const portfolio = [];
+
+    // Iterate over each investment to fetch farm and org details
+    for (const investment of investments) {
+      const { farmID } = investment;
+
+      // Fetch farm details based on farm ID
+      const farm = await Farm.findOne({ farmID });
+
+      // Fetch organization details based on org ID
+      const org = await Org.findOne({ orgID: farm.orgId });
+
+      // Construct portfolio entry with farm and org details
+      const portfolioEntry = {
+        farm: farm.toObject(),
+        org: {
+          orgName: org.orgName,
+          permanentAddress: org.permanentAddress,
+          description: org.description,
+        },
+        investmentDetails: {
+          noOfShares: investment.noOfShares,
+          sharePrice: investment.sharePrice,
+          transactionID: investment.transactionID,
+          returns: investment.returns,
+          timestamp: investment.timestamp,
+        },
+      };
+
+      // Add portfolio entry to the portfolio array
+      portfolio.push(portfolioEntry);
+    }
+
+    // Respond with the portfolio data
+    res.status(200).json(portfolio);
+  } catch (error) {
+    // Handle errors
+    console.error("Error in fetching portfolio:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { invSignUp, investInFarm, invLogin, fetchPortfolio };

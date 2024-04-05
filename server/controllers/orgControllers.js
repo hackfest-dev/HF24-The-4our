@@ -1,4 +1,5 @@
 const Organisation = require("../models/OrgSchema");
+const Farm = require("../models/FarmsSchema");
 const { v4: uuidv4 } = require("uuid");
 const {
   hashPassword,
@@ -102,4 +103,18 @@ const orgLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { orgSignUp, orgLogin };
+const getAllFarmsOfOrganization = async (req, res) => {
+  try {
+    const { orgID } = req.body;
+
+    // Find all farms associated with the given orgID
+    const farms = await Farm.find({ orgId: orgID });
+
+    res.status(200).json({ farms });
+  } catch (error) {
+    console.error("Error in fetching farms:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = { orgSignUp, orgLogin, getAllFarmsOfOrganization };
