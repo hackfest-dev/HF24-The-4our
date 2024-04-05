@@ -1,7 +1,7 @@
+import 'package:ecosavvy/AccountPage.dart';
+import 'package:ecosavvy/HomePage.dart';
+import 'package:ecosavvy/PortfolioPage.dart';
 import 'package:flutter/material.dart';
-import 'package:researchear/AccountPage.dart';
-import 'package:researchear/HomePage.dart';
-import 'package:researchear/PortfolioPage.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
