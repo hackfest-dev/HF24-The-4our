@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecosavvy/Phone_no.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
 
@@ -168,11 +169,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => PhoneNumberPage()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PhoneNumberPage()),
+                            );
                           },
                           child: Card(
                             elevation: 5.0,
