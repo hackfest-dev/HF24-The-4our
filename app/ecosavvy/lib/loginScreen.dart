@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:ecosavvy/Phone_no.dart';
 import 'package:flutter/material.dart';
+import 'package:researchear/Phone_no.dart';
+import 'package:researchear/SignupScreen.dart';
 import 'package:sensors/sensors.dart';
 
 class LoginPage extends StatefulWidget {
@@ -82,15 +83,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   'Welcome to ',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 25,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  'Whatever it is ->',
+                                  'EcoSavvy',
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 0, 207, 45),
-                                    fontSize: 25,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -205,11 +206,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => MyPageView()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyPageView()),
+                            );
                           },
                           child: Card(
                             elevation: 5.0,

@@ -33,12 +33,19 @@ class Farm {
 
   factory Farm.fromJson(Map<String, dynamic> json) {
     return Farm(
-        id: json['farmID'],
-        name: json['farmName'],
-        location: json['Location'],
-        energytype: json['energyCategory'],
-        noofinvestors : json['totalInvestors']!
+      id: json['farmID'],
+      name: json['farmName'],
+      location: json['Location'],
+      energytype: json['energyCategory'],
+      noofinvestors : json['totalInvestors']!
     );
   }
 }
 
+// Model class for time series data
+class TimeSeriesData {
+  final String time;
+  final double value;
+
+  TimeSeriesData(this.time, this.value);
+}
