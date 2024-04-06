@@ -186,7 +186,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
-                  Center(child: Text('My Shares Tab')),
+        MySharesTab(farm: widget.farm, org: widget.org),
                 ],
               ),
             ),
@@ -315,6 +315,134 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       _tooltipText =
           'Time: $time:00 hrs\nEnergy: ${value.toStringAsFixed(2)} kwh';
       _tooltipPosition = tapPosition;
+    });
+  }
+}
+
+// MySharesTab widget
+class MySharesTab extends StatefulWidget {
+  final Farm farm;
+  final Organisation org;
+
+  MySharesTab({required this.farm, required this.org});
+
+  @override
+  _MySharesTabState createState() => _MySharesTabState();
+}
+
+class _MySharesTabState extends State<MySharesTab> {
+  int sharesToBuy = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Invest in ${widget.farm.name} today',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              _showBuyDialog();
+            },
+            child: Text('Buy'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBuyDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Buy Shares'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Energy Type: ${widget.farm.energytype}'),
+            Text('Number of Investors: ${widget.farm.noofinvestors}'),
+            Text('Farm Valuation: ${widget.farm.farmValuation}'),
+            Text('Total Investors: ${widget.farm.noofinvestors}'),
+            Text('Number of Shares: ${widget.farm.numberOfShares}'),
+            Text('Available Shares: ${widget.farm.availableShares}'),
+            Text('Each Share Price: ${widget.farm.eachSharePrice}'),
+            Text('Energy Unit: ${widget.farm.energyUnit}'),
+            Text('Energy Per Share: ${widget.farm.energyPerShare}'),
+            SizedBox(height: 20),
+            Text('Enter the number of shares to buy:'),
+            TextField(
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  sharesToBuy = int.tryParse(value) ?? 0;
+                });
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
+                _buyShares(sharesToBuy);
+              } else {
+                // Handle invalid input
+              }
+            },
+            child: Text('Buy'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _buyShares(int sharesToBuy) {
+    // Implement your buy shares functionality here
+    String farmId = widget.farm.id;
+    String transactionId = 'shiuffiufgfgsiddferrbuygsrt'; // Generate a random transaction ID
+    String timestamp = DateTime.now().toIso8601String();
+
+    // Send a request to the specified URL with the required attributes
+    final String apiUrl = 'http://172.16.17.4:3000/investor/invest';
+    final String userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
+
+    http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Authorization': 'Bearer $userToken',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'farmId': farmId,
+        'noOfShares': sharesToBuy,
+        'transactionID': transactionId,
+        'timestamp': timestamp,
+      }),
+    ).then((response) {
+      if (response.statusCode == 200) {
+        // Handle success
+        print('Shares bought successfully!');
+      } else {
+        // Handle error
+        print('Failed to buy shares: ${response.statusCode}');
+      }
+    }).catchError((error) {
+      // Handle error
+      print('Error buying shares: $error');
     });
   }
 }

@@ -213,7 +213,7 @@ class OrganisationCard extends StatelessWidget {
                                   children: [
                                     Center(
                                       child: Text(
-                                        farm.name,
+                                        farm.name!,
                                         style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 16,
@@ -298,7 +298,7 @@ class CustomSearchDelegate extends SearchDelegate {
         .where((org) =>
             org.name.toLowerCase().contains(query.toLowerCase()) ||
             org.farms.any((farm) =>
-                farm.name.toLowerCase().contains(query.toLowerCase())))
+                farm.name!.toLowerCase().contains(query.toLowerCase())))
         .toList();
 
     return ListView(

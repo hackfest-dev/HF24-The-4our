@@ -36,20 +36,83 @@ class Farm {
   final String location;
   final String energytype;
   final int noofinvestors;
-  Farm(
-      {required this.id,
-      required this.name,
-      required this.location,
-      required this.energytype,
-      required this.noofinvestors});
+  final int? farmValuation;
+  final int totalInvestors;
+  final int? numberOfShares;
+  final int availableShares;
+  final int eachSharePrice;
+  final int govtSubsidy;
+  final int orgInvestment;
+  final double orgInvestmentPercent;
+  final int expectedEnergyOutput;
+  final String energyUnit;
+  final String description;
+  final double govtEquityPercent;
+  final double govtEnergyOutput;
+  final double investorEquityPercent;
+  final double investorEnergyOutput;
+  final double energyPerShare;
+  final double orgEnergyOutput;
+  final bool farmReady;
+  final String farmExpectedReadyDate;
+  final String expectedDateOfReturns;
+
+  Farm({
+    required this.id,
+    required this.name,
+    required this.location,
+    required this.energytype,
+    required this.noofinvestors,
+    this.farmValuation,
+    required this.totalInvestors,
+    this.numberOfShares,
+    required this.availableShares,
+    required this.eachSharePrice,
+    required this.govtSubsidy,
+    required this.orgInvestment,
+    required this.orgInvestmentPercent,
+    required this.expectedEnergyOutput,
+    required this.energyUnit,
+    required this.description,
+    required this.govtEquityPercent,
+    required this.govtEnergyOutput,
+    required this.investorEquityPercent,
+    required this.investorEnergyOutput,
+    required this.energyPerShare,
+    required this.orgEnergyOutput,
+    required this.farmReady,
+    required this.farmExpectedReadyDate,
+    required this.expectedDateOfReturns,
+  });
 
   factory Farm.fromJson(Map<String, dynamic> json) {
     return Farm(
-        id: json['farmID'],
-        name: json['farmName'],
-        location: json['Location'],
-        energytype: json['energyCategory'],
-        noofinvestors: json['totalInvestors']!);
+      id: json['farmID'],
+      name: json['farmName'],
+      location: json['Location'],
+      energytype: json['energyCategory'],
+      noofinvestors: json['totalInvestors']!,
+      farmValuation: json['farmValuation'],
+      totalInvestors: json['totalInvestors'],
+      numberOfShares: json['numberOfShares'],
+      availableShares: json['availableShares'],
+      eachSharePrice: json['eachSharePrice'],
+      govtSubsidy: json['govtSubsidy'],
+      orgInvestment: json['orgInvestment'],
+      orgInvestmentPercent: json['orgInvestmentPercent'],
+      expectedEnergyOutput: json['expectedEnergyOutput'],
+      energyUnit: json['energyUnit'],
+      description: json['description'],
+      govtEquityPercent: json['govtEquityPercent'],
+      govtEnergyOutput: json['govtEnergyOutput'],
+      investorEquityPercent: json['investorEquityPercent'],
+      investorEnergyOutput: json['investorEnergyOutput'],
+      energyPerShare: json['energyPerShare'],
+      orgEnergyOutput: json['orgEnergyOutput'],
+      farmReady: json['farmReady'],
+      farmExpectedReadyDate: json['farmExpectedReadyDate'],
+      expectedDateOfReturns: json['expectedDateOfReturns'],
+    );
   }
 }
 

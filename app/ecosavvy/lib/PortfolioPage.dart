@@ -37,7 +37,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
         // Check if the response body is not null
         if (response.body != null) {
           // Decode the response body
-          List<dynamic> data = jsonDecode(response.body);
+          List<dynamic> data = await jsonDecode(response.body);
           List<Portfolio> portfolioList =
               data.map((json) => Portfolio.fromJson(json)).toList();
 
