@@ -14,11 +14,11 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff252525),
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xff252525),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         title: Text(
           "Account",
           textAlign: TextAlign.center,

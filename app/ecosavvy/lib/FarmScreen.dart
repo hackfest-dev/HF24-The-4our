@@ -8,8 +8,9 @@ import 'dart:math' as math;
 class FarmScreen extends StatefulWidget {
   final Farm farm;
   final Organisation org;
+  final List<Portfolio> userPortfolio;
 
-  FarmScreen({required this.farm, required this.org});
+  FarmScreen({required this.farm, required this.org, required this.userPortfolio});
 
   @override
   _FarmScreenState createState() => _FarmScreenState();
@@ -30,6 +31,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   int _selectedTabIndex = 0;
   String _tooltipText = '';
   Offset _tooltipPosition = Offset.zero;
+  int sharesToBuy = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -186,7 +189,27 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
-        MySharesTab(farm: widget.farm, org: widget.org),
+                  widget.userPortfolio.isNotEmpty
+                      ? MySharesTab(farm: widget.farm, org: widget.org, userPortfolio: widget.userPortfolio)
+                      : Center(child:Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Invest in ${widget.farm.name} today',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          _showBuyDialog();
+                        },
+                        child: Text('Buy'),
+                      ),
+                    ],
+                  ),),
                 ],
               ),
             ),
@@ -317,47 +340,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       _tooltipPosition = tapPosition;
     });
   }
-}
-
-// MySharesTab widget
-class MySharesTab extends StatefulWidget {
-  final Farm farm;
-  final Organisation org;
-
-  MySharesTab({required this.farm, required this.org});
-
-  @override
-  _MySharesTabState createState() => _MySharesTabState();
-}
-
-class _MySharesTabState extends State<MySharesTab> {
-  int sharesToBuy = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Invest in ${widget.farm.name} today',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              _showBuyDialog();
-            },
-            child: Text('Buy'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showBuyDialog() {
     showDialog(
       context: context,
@@ -397,7 +379,8 @@ class _MySharesTabState extends State<MySharesTab> {
           ),
           TextButton(
             onPressed: () {
-              if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
+              if (sharesToBuy > 0 &&
+                  sharesToBuy <= widget.farm.availableShares) {
                 _buyShares(sharesToBuy);
               } else {
                 // Handle invalid input
@@ -409,18 +392,22 @@ class _MySharesTabState extends State<MySharesTab> {
       ),
     );
   }
-
   void _buyShares(int sharesToBuy) {
-    // Implement your buy shares functionality here
+    setState(() {
+      isLoading = true;
+    });
+
     String farmId = widget.farm.id;
     String transactionId = 'shiuffiufgfgsiddferrbuygsrt'; // Generate a random transaction ID
     String timestamp = DateTime.now().toIso8601String();
 
     // Send a request to the specified URL with the required attributes
     final String apiUrl = 'http://172.16.17.4:3000/investor/invest';
-    final String userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
+    final String userToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
 
-    http.post(
+    http
+        .post(
       Uri.parse(apiUrl),
       headers: {
         'Authorization': 'Bearer $userToken',
@@ -432,17 +419,130 @@ class _MySharesTabState extends State<MySharesTab> {
         'transactionID': transactionId,
         'timestamp': timestamp,
       }),
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 200) {
         // Handle success
         print('Shares bought successfully!');
+        _showSuccessDialog();
       } else {
         // Handle error
         print('Failed to buy shares: ${response.statusCode}');
+        _showFailureDialog();
       }
     }).catchError((error) {
       // Handle error
       print('Error buying shares: $error');
+      _showFailureDialog();
+    }).whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
     });
   }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Success'),
+        content: Text('Shares bought successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFailureDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Failure'),
+        content: Text('Failed to buy shares.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 }
+class MySharesTab extends StatefulWidget {
+  final Farm farm;
+  final Organisation org;
+  final List<Portfolio> userPortfolio;
+
+  MySharesTab({required this.farm, required this.org, required this.userPortfolio});
+
+  @override
+  _MySharesTabState createState() => _MySharesTabState();
+}
+
+class _MySharesTabState extends State<MySharesTab> {
+  int sharesToBuy = 0;
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // Filter user's portfolio data for the current farm
+    List<Portfolio> farmShares = widget.userPortfolio
+        .where((portfolio) => portfolio.farm.farmID == widget.farm.id)
+        .toList();
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Invest in ${widget.farm.name} today',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20),
+          // Display details of purchased shares
+          if (farmShares.isNotEmpty)
+            Column(
+              children: [
+                Text(
+                  'Your Shares:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 10),
+                // Display details of each purchased share
+                for (var share in farmShares)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Number of Shares: ${share.investmentDetails.noOfShares}'),
+                      Text('Returns: ₹${share.investmentDetails.returns.toStringAsFixed(3)}'),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+              ],
+            ),
+          // Button to buy additional shares
+
+        ],
+      ),
+    );
+  }
+
+  // Function to show the buy shares dialog
+
+}
+
