@@ -1,7 +1,9 @@
 import 'package:ecosavvy/Account/about_us.dart';
 import 'package:ecosavvy/Account/help_center.dart';
 import 'package:ecosavvy/Account/legal_a.dart';
+import 'package:ecosavvy/loginScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -35,38 +37,32 @@ class _AccountPageState extends State<AccountPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              color: Color(0xff444444),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Basic Details",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+            Center(
+              child: Card(
+                color: Color(0xff444444),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Name: John Doe",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      "Name: John Doe",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                      SizedBox(height: 8),
+                      Text(
+                        "Email: john.doe@example.com",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      "Email: john.doe@example.com",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -100,7 +96,7 @@ class _AccountPageState extends State<AccountPage> {
                       MaterialPageRoute(builder: (context) => AboutUsPage()),
                     );
                   }),
-                  Divider(color: const Color.fromARGB(255, 11, 8, 8)),
+                  Divider(color: Colors.white),
                   _buildListTile("Legal Agreements", Icons.assignment_rounded,
                       () {
                     Navigator.push(
@@ -110,8 +106,16 @@ class _AccountPageState extends State<AccountPage> {
                     );
                   }),
                   Divider(color: Colors.white),
-                  _buildListTile("Sign Out", Icons.logout_rounded, () {
-                    // Handle onTap action for "Sign Out" list tile
+                  _buildListTile("Sign Out", Icons.logout_rounded, ()async {
+                  // Remove token from shared preferences
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('token');
+
+                  // Navigate back to the first screen
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()), // Replace with your LoginScreen
+                        (route) => false,);
                   }),
                 ],
               ),
