@@ -147,7 +147,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onPressed: () {
                 if (_pageController.page != 10) {
-
                   _pageController.nextPage(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -343,7 +342,7 @@ class _MyPageViewState extends State<MyPageView> {
     );
 
     // Check if the request was successful (status code 200)
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // Parse the response body (assuming it's JSON)
       var responseBody = jsonDecode(response.body);
 
