@@ -24,6 +24,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        <Route path="login" element={<LoginForm />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="farms" element={<Farms />} />
@@ -33,7 +34,6 @@ export default function App() {
           <Route path="help" element={<Help />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-        <Route path="login" element={<LoginForm />} />
         <Route path="signup" element={<SignupForm />} />
         <Route path="adminlogin" element={<AdminLoginForm />} />
 

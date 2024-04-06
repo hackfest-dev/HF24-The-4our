@@ -146,6 +146,18 @@ const fetchFarmReturns = async (req, res, next) => {
     const farmDegradePercent = (Math.random() * (15 - 10) + 10).toFixed(2);
     const farmMaintenancePercent = (100 - farmDegradePercent).toFixed(2);
 
+    let xdata = [];
+
+    if (duration === "1D") {
+      xdata = farmReturns;
+    } else if (duration === "1M") {
+      xdata = calculateDailyAverages(farmReturns, 30);
+    } else if (duration === "6M") {
+      xdata = calculateWeeklyAverages(farmReturns, 6 * 4);
+    } else if (duration === "1Y") {
+      xdata = calculateBiWeeklyAverages(farmReturns, 365);
+    }
+
     // Prepare response data
     let responseData = {
       farmID,
@@ -161,6 +173,7 @@ const fetchFarmReturns = async (req, res, next) => {
         currentOutput: currentDateOutput,
       },
       data: farmReturns,
+      xdata: xdata,
     };
 
     // Respond with the fetched returns data along with analytics
@@ -170,6 +183,65 @@ const fetchFarmReturns = async (req, res, next) => {
     console.error("Error in fetching farm returns:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+};
+
+const calculateDailyAverages = (data, period) => {
+  const dailyAverages = [];
+  let sum = 0;
+  let count = 0;
+
+  data.forEach((item, index) => {
+    sum += item.energyGeneratedKilowattHours;
+    count++;
+
+    if (index >= period - 1) {
+      dailyAverages.push(sum / count);
+      sum -= data[index - period + 1].energyGeneratedKilowattHours;
+      count--;
+    }
+  });
+
+  return dailyAverages;
+};
+
+// Function to calculate weekly averages
+const calculateWeeklyAverages = (data, period) => {
+  const weeklyAverages = [];
+  let sum = 0;
+  let count = 0;
+
+  data.forEach((item, index) => {
+    sum += item.energyGeneratedKilowattHours;
+    count++;
+
+    if (index >= period * 7 - 1) {
+      weeklyAverages.push(sum / count);
+      sum -= data[index - period * 7 + 1].energyGeneratedKilowattHours;
+      count--;
+    }
+  });
+
+  return weeklyAverages;
+};
+
+// Function to calculate bi-weekly averages
+const calculateBiWeeklyAverages = (data, period) => {
+  const biWeeklyAverages = [];
+  let sum = 0;
+  let count = 0;
+
+  data.forEach((item, index) => {
+    sum += item.energyGeneratedKilowattHours;
+    count++;
+
+    if (index >= period * 2 - 1) {
+      biWeeklyAverages.push(sum / count);
+      sum -= data[index - period * 2 + 1].energyGeneratedKilowattHours;
+      count--;
+    }
+  });
+
+  return biWeeklyAverages;
 };
 
 const getFarmWithOrganisation = async (req, res) => {

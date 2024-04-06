@@ -86,6 +86,11 @@ const investInFarm = async (req, res) => {
     const orgId = farm.orgId;
     const sharePrice = farm.eachSharePrice;
 
+    // Check if the number of shares being invested is greater than available shares
+    if (noOfShares > farm.availableShares) {
+      return res.status(400).json({ error: "Insufficient available shares" });
+    }
+
     // Check if the investor has already invested in the farm
     const existingInvestment = await InvestorToFarm.findOne({
       aadharNumber,
