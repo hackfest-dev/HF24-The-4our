@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 const linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underine"
 
 
-export default function Sidebar() {
+export default function AdminSidebar() {
   return (
     <div className='fixed bg-neutral-900 flex flex-col w-60 text-white h-screen'>
       <div className='flex'>
