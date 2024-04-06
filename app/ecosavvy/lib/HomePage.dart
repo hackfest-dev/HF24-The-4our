@@ -35,17 +35,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        leading: GestureDetector(
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => MapCord(),
-            //   ),
-            // );
-          },
-          child: Icon(Icons.map, size: 27),
-        ),
+
         title: const Text(
           "EcoSavvy",
           style: TextStyle(
