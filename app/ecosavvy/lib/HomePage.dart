@@ -206,7 +206,7 @@ class OrganisationCard extends StatelessWidget {
                                   children: [
                                     Center(
                                       child: Text(
-                                        farm.farmName,
+                                        farm.name,
                                         style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 16,
@@ -229,7 +229,7 @@ class OrganisationCard extends StatelessWidget {
                                                   .w600), // Lighter text for readability
                                         ),
                                         Text(
-                                          "Energy Form: ${farm.energyCategory}",
+                                          "Energy Form: ${farm.energytype}",
                                           style: TextStyle(
                                               color: Colors.white70,
                                               fontSize: 12,
@@ -291,7 +291,7 @@ class CustomSearchDelegate extends SearchDelegate {
         .where((org) =>
             org.name.toLowerCase().contains(query.toLowerCase()) ||
             org.farms.any((farm) =>
-                farm.farmName.toLowerCase().contains(query.toLowerCase())))
+                farm.name.toLowerCase().contains(query.toLowerCase())))
         .toList();
 
     return ListView(
