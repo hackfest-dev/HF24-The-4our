@@ -1,5 +1,5 @@
 import React from 'react';
-import Solarfarm from '/Users/ratnesh/Desktop/Ecosavvy/client/src/images/solarfarm.jpeg'
+import Solarfarm from '../images/solarfarm.jpeg'
 
 const FarmCard = ({ imageUrl, title, category, location}) => {
   return (

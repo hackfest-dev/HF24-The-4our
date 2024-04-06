@@ -48,7 +48,7 @@ export default function FarmForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto pt-20 text-black ">
+    <form onSubmit={handleSubmit} className="w-1/2 mx-auto pt-20 text-black ">
       <div className="grid md:grid-cols-2 md:gap-6">
         <div className="relative z-0 w-full mb-5 group">
           <input
@@ -80,6 +80,17 @@ export default function FarmForm() {
             onChange={handleInputChange}
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder="Farm Name"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Farm Description"
             required
           />
         </div>
@@ -160,10 +171,65 @@ export default function FarmForm() {
             required
           />
         </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="number"
+            name="govtSubsidy"
+            value={formData.govtSubsidy}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Government Subsidy"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="number"
+            name="orgInvestment"
+            value={formData.orgInvestment}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Organisation investment"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="number"
+            name="expectedEnergyOutput"
+            value={formData.expectedEnergyOutput}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Expected Energy Output"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="number"
+            name="farmExpectedReadyDate"
+            value={formData.farmExpectedReadyDate}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Farm expected ready date"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="number"
+            name="expectedDateOfReturns"
+            value={formData.expectedDateOfReturns}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Farm expected date of returns"
+            required
+          />
+        </div>
       </div>
       <button
         type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ="
       >
         Submit
       </button>

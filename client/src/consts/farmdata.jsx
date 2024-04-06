@@ -1,18 +1,5 @@
 export const FARM_DATA = [
   {
-    farmID: '1',
-    imageUrl: '/Users/ratnesh/Desktop/Ecosavvy/client/src/images/solarfarm.jpeg',
-    farmName: 'Khatarnak Farm',
-    energyCategory: 'Solar',
-    Location: 'Jalna',
-    news: ['News1', 'News2', 'News3'],
-    farmValuation: 40000,
-    totalInvestors: 1,
-    numberOfShares: 123,
-    availableShares: 90,
-    eachSharePrice: 40000,
-  },
-  {
     farmID: '2',
     imageUrl: '/path/to/image2.jpg',
     farmName: 'Green Valley Farms',
@@ -24,18 +11,12 @@ export const FARM_DATA = [
     numberOfShares: 150,
     availableShares: 100,
     eachSharePrice: 50000,
-  },
-  {
-    farmID: '3',
-    imageUrl: '/path/to/image3.jpg',
-    farmName: 'Sunrise Acres',
-    energyCategory: 'Solar',
-    Location: 'Chennai',
-    news: ['News7', 'News8', 'News9'],
-    farmValuation: 80000,
-    totalInvestors: 3,
-    numberOfShares: 200,
-    availableShares: 120,
-    eachSharePrice: 60000,
-  },
+    govtSubsidy: 1000,
+    orgInvestment: 2000,
+    expectedEnergyOutput: 1000,
+    description: 'farm description',
+    farmExpectedReadyDate: "2024-03-11T18:30:00.000Z",
+    expectedDateOfReturns: "2024-04-11T18:30:00.000Z"
+  }
+
 ];

@@ -18,8 +18,10 @@ class _MyPageViewState extends State<MyPageView> {
   TextEditingController nomineeNameController = TextEditingController();
   TextEditingController nomineeAadhaarController = TextEditingController();
   TextEditingController nomineeDobController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   List<String> userData = [
+    "",
     "",
     "",
     "",
@@ -108,6 +110,15 @@ class _MyPageViewState extends State<MyPageView> {
                       8,
                       isDatePicker: true,
                     ),
+                    buildPage(
+                      "What is your password?",
+                      "Enter here",
+                      Icons.lock,
+                      passwordController,
+                      9,
+                      isPassword:
+                          true, // Set isPassword to true for password field
+                    ),
                   ],
                 ),
               ),
@@ -160,12 +171,10 @@ class _MyPageViewState extends State<MyPageView> {
                     MaterialStateProperty.all<Color>(Color(0xFF5803AD)),
               ),
               onPressed: () {
-                if (_pageController.page != 0) {
-                  _pageController.previousPage(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
+                _pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               },
               child: Row(
                 children: [
@@ -192,7 +201,7 @@ class _MyPageViewState extends State<MyPageView> {
 
   Widget buildPage(String question, String hintText, IconData iconData,
       TextEditingController controller, int index,
-      {bool isDatePicker = false}) {
+      {bool isDatePicker = false, bool isPassword = false}) {
     return Container(
       color: Colors.black,
       child: Padding(
@@ -224,6 +233,7 @@ class _MyPageViewState extends State<MyPageView> {
             else
               TextFormField(
                 controller: controller,
+                obscureText: isPassword, // Set obscureText based on isPassword
                 style:
                     TextStyle(color: Colors.white), // Set text color to white
                 cursorColor: Color(0xFF5803AD), // Set cursor color
@@ -292,6 +302,7 @@ class _MyPageViewState extends State<MyPageView> {
     String nomineeName = nomineeNameController.text.trim();
     String nomineeAadhaar = nomineeAadhaarController.text.trim();
     String nomineeDob = nomineeDobController.text.trim();
+    String password = passwordController.text.trim();
 
     // Function to handle navigation back to the corresponding field
     void navigateBack(int index) {
@@ -311,7 +322,8 @@ class _MyPageViewState extends State<MyPageView> {
         dob.isEmpty ||
         nomineeName.isEmpty ||
         nomineeAadhaar.isEmpty ||
-        nomineeDob.isEmpty) {
+        nomineeDob.isEmpty ||
+        password.isEmpty) {
       showDialog(
         context: context,
         builder: (context) {
@@ -352,6 +364,7 @@ class _MyPageViewState extends State<MyPageView> {
     userData[6] = nomineeName;
     userData[7] = nomineeAadhaar;
     userData[8] = nomineeDob;
+    userData[9] = password;
 
     // Optionally, you can display a success message or perform any other action
     Navigator.of(context).pushReplacement(
