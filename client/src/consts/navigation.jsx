@@ -65,7 +65,7 @@ export const DASHBOARD_SIDEBAR_LINKS_BOTTOM = [
     {
         key: 'logout',
         label: 'Logout',
-        path: '/logout',
+        path: '/login',
         icon: <MdLogout/>
     },    
 ]
@@ -85,7 +85,7 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS_BOTTOM = [
     {
         key: 'logout',
         label: 'Logout',
-        path: '/logout',
+        path: '/adminlogin',
         icon: <MdLogout/>
     },    
 ]
