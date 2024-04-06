@@ -444,6 +444,10 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                               ),
                               SizedBox(height: 20),
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.teal,
+
+                                ),
                                 onPressed: () {
                                   // Navigator.push(
                                   //   context,
@@ -626,9 +630,21 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         fullscreenDialog: true,
         builder: (BuildContext context) {
           return Scaffold(
+            backgroundColor: Colors.black,
             appBar: AppBar(
-              title: Text('Buy Shares'),
-              backgroundColor: Colors.black,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              backgroundColor: Color.fromARGB(255, 0, 0, 0),
+              title: Text(
+                "Buy Shares",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              centerTitle: true,
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.all(16),
@@ -639,8 +655,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Energy Type: ${widget.farm.energytype}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                      color: Colors.white, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -651,8 +666,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Number of Investors: ${widget.farm.noofinvestors}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -663,8 +677,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Farm Valuation: ${widget.farm.farmValuation}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -675,8 +688,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Total Investors: ${widget.farm.noofinvestors}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -687,8 +699,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Number of Shares: ${widget.farm.numberOfShares}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white// Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -699,8 +710,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Available Shares: ${widget.farm.availableShares}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -711,8 +721,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Each Share Price: ${widget.farm.eachSharePrice}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -723,8 +732,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     'Energy Unit: ${widget.farm.energyUnit}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -732,11 +740,10 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     height: 8,
                   ),
                   Text(
-                    'Energy Per Share: ${widget.farm.energyPerShare}',
+                    'Energy Per Share: ${widget.farm.energyPerShare.toStringAsFixed(3)}',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
-                      fontWeight:
-                          FontWeight.bold, // Optionally, make the text bold
+                        color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -750,6 +757,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       // Add more text style properties as needed
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   TextField(
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -757,24 +767,52 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         sharesToBuy = int.tryParse(value) ?? 0;
                       });
                     },
+                    decoration: InputDecoration(
+                      hintText: 'Enter shares to buy',
+                      hintStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                      ),
+                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (sharesToBuy > 0 &&
-                          sharesToBuy <= widget.farm.availableShares) {
-                        _buyShares(sharesToBuy);
-                      } else {
-                        // Handle invalid input
-                      }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromARGB(
-                              255, 30, 102, 12)), // Change color as needed
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
+                      _buyShares(sharesToBuy);
+                    } else {
+                      // Handle invalid input
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+                    // Change color as needed
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0), // Adjust the border radius here
+                      ),
                     ),
-                    child: Text('Buy'),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      Size(200.0, 50.0), // Adjust the width here
+                    ),
                   ),
+                  child: Text('Buy',style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold,// Adjust the font size as needed
+                      color: Colors.white// Optionally, make the text bold
+                    // Add more text style properties as needed
+                  ),),
+                ),),
                 ],
               ),
             ),
