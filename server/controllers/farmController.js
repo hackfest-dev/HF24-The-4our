@@ -2,6 +2,7 @@ const Farm = require("../models/FarmsSchema"); // Import the Farm model
 const { v4: uuidv4 } = require("uuid");
 const Returns = require("../models/returnsSchema");
 const InvestorToFarm = require("../models/investorToFarmSchema");
+const moment = require("moment");
 
 const createFarm = async (req, res, next) => {
   try {
@@ -120,12 +121,17 @@ const createFarm = async (req, res, next) => {
 const storeReturnsData = async (req, res, next) => {
   try {
     const { farmID, timestamp, energyGeneratedKilowattHours } = req.body;
-    console.log(req.body);
+
+    // Parse the timestamp to a JavaScript Date object
+    const parsedTimestamp = moment(timestamp).toDate();
+
+    parsedTimestamp.setHours(parsedTimestamp.getHours() + 5);
+    parsedTimestamp.setMinutes(parsedTimestamp.getMinutes() + 30);
 
     // Create a new returns document
     const newReturn = new Returns({
       farmID,
-      timestamp,
+      timestamp: parsedTimestamp, // Save the parsed timestamp directly
       energyGeneratedKilowattHours,
     });
 
@@ -210,4 +216,36 @@ const storeSyntheticData = async (req, res) => {
   }
 };
 
-module.exports = { createFarm, storeReturnsData, storeSyntheticData };
+const addNewsToFarm = async (req, res) => {
+  try {
+    // Extract farmID and news from the request body
+    const { farmID, news } = req.body;
+
+    // Find the farm by farmID
+    const farm = await Farm.findOne({ farmID });
+
+    // If farm not found, return 404 error
+    if (!farm) {
+      return res.status(404).json({ message: "Farm not found" });
+    }
+
+    // Add the new news item to the farm's news array
+    farm.news.push(news);
+
+    // Save the updated farm data
+    await farm.save();
+
+    // Send success response
+    res.status(200).json({ message: "News added to farm successfully" });
+  } catch (error) {
+    console.error("Error adding news to farm:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  createFarm,
+  storeReturnsData,
+  storeSyntheticData,
+  addNewsToFarm,
+};

@@ -7,6 +7,7 @@ const {
   createFarm,
   storeReturnsData,
   storeSyntheticData,
+  addNewsToFarm,
 } = require("../controllers/farmController");
 
 farmRouter.post("/create", verifyToken, createFarm);
@@ -14,5 +15,7 @@ farmRouter.post("/create", verifyToken, createFarm);
 farmRouter.post("/storereturns", storeReturnsData);
 
 farmRouter.post("/storesyntheticreturns", storeSyntheticData);
+
+farmRouter.post("/addnews", addNewsToFarm);
 
 module.exports = farmRouter;

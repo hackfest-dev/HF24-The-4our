@@ -35,11 +35,13 @@ const invRouter = require("./routes/invRouter");
 const orgRouter = require("./routes/orgRouter");
 const farmRouter = require("./routes/farmRouter");
 const fetchRouter = require("./routes/fetchRouter");
+const adminRouter = require("./routes/adminRouter");
 
 app.use("/investor", invRouter);
 app.use("/organisation", orgRouter);
 app.use("/farm", farmRouter);
 app.use("/fetch", fetchRouter);
+app.use("/admin", adminRouter);
 
 app.listen(PORT, async () => {
   console.log(`Server listening on port ${PORT}`);
