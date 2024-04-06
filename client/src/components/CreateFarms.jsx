@@ -86,7 +86,7 @@ export default function FarmForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-1/2 mx-auto pt-20 text-black ">
-      <div className="grid md:grid-cols-2 md:gap-6">
+      <div className="grid md:grid-cols-2 md:gap-3 ">
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="text"

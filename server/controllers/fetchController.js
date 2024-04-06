@@ -1,6 +1,7 @@
 const Org = require("../models/OrgSchema");
 const Farm = require("../models/FarmsSchema");
 const Returns = require("../models/returnsSchema");
+const Organisation = require("../models/OrgSchema");
 
 const fetchAllOrgs = async (req, res, next) => {
   try {
@@ -118,4 +119,39 @@ const fetchFarmReturns = async (req, res, next) => {
   }
 };
 
-module.exports = { fetchAllOrgs, fetchAllFarms, fetchFarmReturns };
+const getFarmWithOrganisation = async (req, res) => {
+  try {
+    // Retrieve farm data
+    const farmId = req.params.farmId;
+    const farm = await Farm.findOne({ farmID: farmId });
+
+    if (!farm) {
+      return res.status(404).json({ message: "Farm not found" });
+    }
+
+    const organisation = await Organisation.findOne({ orgID: farm.orgId });
+
+    if (!organisation) {
+      return res.status(404).json({ message: "Organisation not found" });
+    }
+
+    // Combine farm and organisation data
+    const farmWithOrganisation = {
+      farm: farm,
+      organisation: organisation,
+    };
+
+    // Send the combined data as a response
+    res.json(farmWithOrganisation);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+module.exports = {
+  fetchAllOrgs,
+  fetchAllFarms,
+  fetchFarmReturns,
+  getFarmWithOrganisation,
+};

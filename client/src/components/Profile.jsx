@@ -9,7 +9,7 @@ import {
 
 export default function Profile() {
 return (
-    <Card className="w-1/2 max-w-[48rem] flex-row justify-end">
+    <Card className="w-1/2 max-w-[48rem] flex-row justify-end mx-auto mt-20">
       <CardHeader
         shadow={false}
         floated={false}
