@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:ecosavvy/Phone_no.dart';
 import 'package:ecosavvy/SignupScreen.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late Animation<RelativeRect> _animation;
   late Animation<RelativeRect> _bgColorAnimation;
   double rotation = 0.0;
+  bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    gyroscopeEvents.listen((GyroscopeEvent event) {
-      // Calculate the rotation angle based on the gyroscope data
-      double angle = -atan2(event.y, event.z);
-      setState(() {
-        rotation = angle;
-      });
-    });
+    _isDisposed = false;
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -114,30 +108,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-//                       Container(
-//   width: 800, // Adjust width as needed
-//   height: 750, // Adjust height as needed
-//   color: Colors.red,
-//   child: Image.asset(
-//     'assets/your_image.png', // Replace 'your_image.png' with your actual image asset path
-//     fit: BoxFit.cover, // Adjust the fit as needed
-//   ),
-// ),
-
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 1.00,
-                      //   height: MediaQuery.of(context).size.width * 1.00,
-                      //   color: Color.fromARGB(255, 255, 255, 255),
-                      //   child: Image.asset(
-                      //     'assets/2.jpg',
-                      //     fit: BoxFit.fill,
-                      //   ),
-                      // ),
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 1.00,
-                      //   height: MediaQuery.of(context).size.width * 1.00,
-                      //   color: Color.fromARGB(255, 143, 181, 212),
-                      // ),
                     ],
                   ),
                 ],
@@ -251,6 +221,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _controller.dispose();
     _bgColorController.dispose();
     super.dispose();

@@ -10,7 +10,8 @@ class FarmScreen extends StatefulWidget {
   final Organisation org;
   final List<Portfolio> userPortfolio;
 
-  FarmScreen({required this.farm, required this.org, required this.userPortfolio});
+  FarmScreen(
+      {required this.farm, required this.org, required this.userPortfolio});
 
   @override
   _FarmScreenState createState() => _FarmScreenState();
@@ -19,7 +20,6 @@ class FarmScreen extends StatefulWidget {
 class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   late List<TimeSeriesData> _chartData =
       []; // Initialize _chartData to an empty list
-  final List<String> _timeOptions = ['1D', '1M', '6M', '1Y', 'All'];
   String _selectedTimeOption = '1D';
   double _maxYValue = 1.0; // Initialize maximum Y value
   double _primaryXAxisVisibleMaximum =
@@ -109,16 +109,24 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   children: [
                     GestureDetector(
                       onTapDown: (TapDownDetails details) {
-                        final dynamic xPos =
-                            (details.localPosition.dx / context.size!.width) *
-                                _primaryXAxisVisibleMaximum;
-                        final int nearestIndex =
-                            (xPos.round()).clamp(0, _chartData.length - 1);
-                        final TimeSeriesData dataPoint =
-                            _chartData[nearestIndex];
-                        showTooltip(dataPoint.time, dataPoint.value,
-                            details.localPosition);
+                        final double xPos = details.localPosition.dx;
+
+                        // Calculate index of the nearest data point based on the tap position
+                        final int nearestIndex = (xPos / context.size!.width * _chartData.length).round();
+
+                        // Ensure that the index is within valid bounds
+                        if (nearestIndex >= 0 && nearestIndex < _chartData.length) {
+                          final TimeSeriesData dataPoint = _chartData[nearestIndex];
+
+                          // Use the energy value from the TimeSeriesData directly
+                          final double energyValue = dataPoint.value;
+
+                          // Use the obtained energyValue along with the time value in your tooltip or wherever it's needed
+                          showTooltip(dataPoint.time, energyValue, details.localPosition);
+                        }
                       },
+
+
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
                         borderWidth: 0,
@@ -126,29 +134,38 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            isVisible: false
+                        ),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            isVisible: false
+                        ),
                         series: <ChartSeries>[
-                          LineSeries<TimeSeriesData, String>(
+                          ScatterSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) =>
-                                sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) =>
-                                sales.value,
-                            color: Color.fromARGB(186, 162, 204, 98),
-                          )
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            markerSettings: MarkerSettings(
+                              borderWidth: 0.0,
+                              isVisible: true,
+                              color: Color.fromARGB(255, 0, 255, 247),
+                              width: 9,
+                              height: 9,
+                              shape: DataMarkerType.circle,
+                            ),
+                          ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
-                            lineType: CrosshairLineType.both,
-                            lineColor: Colors.grey,
-                            lineWidth: 1,
-                            enable: true,
-                            activationMode: ActivationMode.singleTap,
-                            lineDashArray: [5, 5]),
+                          lineType: CrosshairLineType.both,
+                          lineColor: Colors.grey,
+                          lineWidth: 1,
+                          enable: true,
+                          activationMode: ActivationMode.singleTap,
+                          lineDashArray: [5, 5],
+                        ),
                       ),
+
                     ),
                     Positioned(
                       left: _tooltipPosition.dx - 50,
@@ -190,26 +207,38 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Center(child: Text('News Tab')),
                   // My Shares Tab
                   widget.userPortfolio.isNotEmpty
-                      ? MySharesTab(farm: widget.farm, org: widget.org, userPortfolio: widget.userPortfolio)
-                      : Center(child:Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Invest in ${widget.farm.name} today',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      ? MySharesTab(
+                          farm: widget.farm,
+                          org: widget.org,
+                          userPortfolio: widget.userPortfolio)
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Invest in ${widget.farm.name} today',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         BuySharesPage(farmId: widget.farm.id),
+                                  //   ),
+                                  // );
+                                  _showBuyDialog();
+                                },
+                                child: Text('Buy'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          _showBuyDialog();
-                        },
-                        child: Text('Buy'),
-                      ),
-                    ],
-                  ),),
                 ],
               ),
             ),
@@ -236,10 +265,12 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       // Parse response JSON
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       List<dynamic> rawData = jsonData['data'];
+
       List<TimeSeriesData> data = [];
 
       // Convert JSON data to TimeSeriesData objects
       for (var item in rawData) {
+        print(item);
         data.add(TimeSeriesData(
           item['timestamp'], // Use 'timestamp' field as time
           double.parse(item['energyGeneratedKilowattHours']
@@ -340,65 +371,179 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       _tooltipPosition = tapPosition;
     });
   }
+
   void _showBuyDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Buy Shares'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Energy Type: ${widget.farm.energytype}'),
-            Text('Number of Investors: ${widget.farm.noofinvestors}'),
-            Text('Farm Valuation: ${widget.farm.farmValuation}'),
-            Text('Total Investors: ${widget.farm.noofinvestors}'),
-            Text('Number of Shares: ${widget.farm.numberOfShares}'),
-            Text('Available Shares: ${widget.farm.availableShares}'),
-            Text('Each Share Price: ${widget.farm.eachSharePrice}'),
-            Text('Energy Unit: ${widget.farm.energyUnit}'),
-            Text('Energy Per Share: ${widget.farm.energyPerShare}'),
-            SizedBox(height: 20),
-            Text('Enter the number of shares to buy:'),
-            TextField(
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  sharesToBuy = int.tryParse(value) ?? 0;
-                });
-              },
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Buy Shares'),
+              backgroundColor: Colors.black,
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              if (sharesToBuy > 0 &&
-                  sharesToBuy <= widget.farm.availableShares) {
-                _buyShares(sharesToBuy);
-              } else {
-                // Handle invalid input
-              }
-            },
-            child: Text('Buy'),
-          ),
-        ],
+            body: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Energy Type: ${widget.farm.energytype}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Number of Investors: ${widget.farm.noofinvestors}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Farm Valuation: ${widget.farm.farmValuation}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Total Investors: ${widget.farm.noofinvestors}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Number of Shares: ${widget.farm.numberOfShares}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Available Shares: ${widget.farm.availableShares}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Each Share Price: ${widget.farm.eachSharePrice}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Energy Unit: ${widget.farm.energyUnit}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Energy Per Share: ${widget.farm.energyPerShare}',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Enter the number of shares to buy:',
+                    style: TextStyle(
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
+                      // Add more text style properties as needed
+                    ),
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        sharesToBuy = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (sharesToBuy > 0 &&
+                          sharesToBuy <= widget.farm.availableShares) {
+                        _buyShares(sharesToBuy);
+                      } else {
+                        // Handle invalid input
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(
+                              255, 30, 102, 12)), // Change color as needed
+                    ),
+                    child: Text('Buy'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
+
   void _buyShares(int sharesToBuy) {
     setState(() {
       isLoading = true;
     });
 
     String farmId = widget.farm.id;
-    String transactionId = 'shiuffiufgfgsiddferrbuygsrt'; // Generate a random transaction ID
+    String transactionId =
+        'shiuffiufgfgsiddferrbuygsrt'; // Generate a random transaction ID
     String timestamp = DateTime.now().toIso8601String();
 
     // Send a request to the specified URL with the required attributes
@@ -477,12 +622,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     );
   }
 }
+
 class MySharesTab extends StatefulWidget {
   final Farm farm;
   final Organisation org;
   final List<Portfolio> userPortfolio;
 
-  MySharesTab({required this.farm, required this.org, required this.userPortfolio});
+  MySharesTab(
+      {required this.farm, required this.org, required this.userPortfolio});
 
   @override
   _MySharesTabState createState() => _MySharesTabState();
@@ -528,21 +675,20 @@ class _MySharesTabState extends State<MySharesTab> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Number of Shares: ${share.investmentDetails.noOfShares}'),
-                      Text('Returns: ₹${share.investmentDetails.returns.toStringAsFixed(3)}'),
+                      Text(
+                          'Number of Shares: ${share.investmentDetails.noOfShares}'),
+                      Text(
+                          'Returns: ₹${share.investmentDetails.returns.toStringAsFixed(3)}'),
                       SizedBox(height: 10),
                     ],
                   ),
               ],
             ),
           // Button to buy additional shares
-
         ],
       ),
     );
   }
 
   // Function to show the buy shares dialog
-
 }
-

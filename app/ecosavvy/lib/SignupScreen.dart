@@ -1,5 +1,8 @@
-import 'package:ecosavvy/captcha.dart';
+import 'package:ecosavvy/defaultScreen.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert'; // Add this import statement
+import 'package:http/http.dart' as http; // Add this import statement
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPageView extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _MyPageViewState extends State<MyPageView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController panController = TextEditingController();
+  TextEditingController aadharController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController nomineeNameController = TextEditingController();
@@ -21,6 +25,7 @@ class _MyPageViewState extends State<MyPageView> {
   TextEditingController passwordController = TextEditingController();
 
   List<String> userData = [
+    "",
     "",
     "",
     "",
@@ -74,18 +79,25 @@ class _MyPageViewState extends State<MyPageView> {
                       3,
                     ),
                     buildPage(
+                      "What is your Aadhaar number?",
+                      "Enter here",
+                      Icons.person_add,
+                      aadharController,
+                      4,
+                    ),
+                    buildPage(
                       "What is your permanent address?",
                       "Enter here",
                       Icons.home,
                       addressController,
-                      4,
+                      5,
                     ),
                     buildPage(
                       "What is your date of birth?",
                       "Select here",
                       Icons.calendar_today,
                       dobController,
-                      5,
+                      6,
                       isDatePicker: true,
                     ),
                     buildPage(
@@ -93,21 +105,21 @@ class _MyPageViewState extends State<MyPageView> {
                       "Enter here",
                       Icons.person_add,
                       nomineeNameController,
-                      6,
+                      7,
                     ),
                     buildPage(
                       "What is your nominee's Aadhaar number?",
                       "Enter here",
                       Icons.person_add,
                       nomineeAadhaarController,
-                      7,
+                      8,
                     ),
                     buildPage(
                       "What is your nominee's date of birth?",
                       "Select here",
                       Icons.calendar_today,
                       nomineeDobController,
-                      8,
+                      9,
                       isDatePicker: true,
                     ),
                     buildPage(
@@ -115,7 +127,7 @@ class _MyPageViewState extends State<MyPageView> {
                       "Enter here",
                       Icons.lock,
                       passwordController,
-                      9,
+                      10,
                       isPassword:
                           true, // Set isPassword to true for password field
                     ),
@@ -134,7 +146,8 @@ class _MyPageViewState extends State<MyPageView> {
                 ), // Provide a color here
               ),
               onPressed: () {
-                if (_pageController.page != 8) {
+                if (_pageController.page != 10) {
+
                   _pageController.nextPage(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -292,11 +305,13 @@ class _MyPageViewState extends State<MyPageView> {
     }
   }
 
-  void saveData(BuildContext context) {
+  void saveData(BuildContext context) async {
+    // Your existing code to retrieve user data
     String name = nameController.text.trim();
     String email = emailController.text.trim();
     String phone = phoneController.text.trim();
     String pan = panController.text.trim();
+    String aadhar = aadharController.text.trim();
     String address = addressController.text.trim();
     String dob = dobController.text.trim();
     String nomineeName = nomineeNameController.text.trim();
@@ -304,40 +319,62 @@ class _MyPageViewState extends State<MyPageView> {
     String nomineeDob = nomineeDobController.text.trim();
     String password = passwordController.text.trim();
 
-    // Function to handle navigation back to the corresponding field
-    void navigateBack(int index) {
-      _pageController.animateToPage(
-        index,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
+    // Create a map to hold the user data
+    Map<String, dynamic> userDataMap = {
+      "name": name,
+      "email": email,
+      "phoneNumber": phone,
+      "panNumber": pan,
+      "aadhar": aadhar,
+      "permantAddress": address,
+      "dateOfBirth": dob,
+      "nomineeName": nomineeName,
+      "nomineeAadhaar": nomineeAadhaar,
+      "nomineeDob": nomineeDob,
+      "password": password,
+    };
 
-    // Check if any field is empty
-    if (name.isEmpty ||
-        email.isEmpty ||
-        phone.isEmpty ||
-        pan.isEmpty ||
-        address.isEmpty ||
-        dob.isEmpty ||
-        nomineeName.isEmpty ||
-        nomineeAadhaar.isEmpty ||
-        nomineeDob.isEmpty ||
-        password.isEmpty) {
+    // Send a POST request to the server
+    var url = Uri.parse('http://172.16.17.4:3000/investor/signup');
+    var response = await http.post(
+      url,
+      body: jsonEncode(userDataMap), // Encode user data as JSON
+      headers: {'Content-Type': 'application/json'}, // Set headers
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the response body (assuming it's JSON)
+      var responseBody = jsonDecode(response.body);
+
+      // Extract the token from the response
+      var token = responseBody['token'];
+
+      // Save the token using SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token); // Save the token
+
+      // Optionally, navigate to the next screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    } else {
+      // Request failed, show an error message
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text('Error'),
             content: Text(
-              'Please fill in all the fields.',
+              'Failed to sign up. Please try again later.',
               style: TextStyle(color: Colors.red),
             ),
             actions: [
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  navigateBack(0); // Navigate back to the first field
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF5803AD),
@@ -351,26 +388,6 @@ class _MyPageViewState extends State<MyPageView> {
           );
         },
       );
-      return;
     }
-
-    // Data is valid, you can proceed with saving it
-    userData[0] = name;
-    userData[1] = email;
-    userData[2] = phone;
-    userData[3] = pan;
-    userData[4] = address;
-    userData[5] = dob;
-    userData[6] = nomineeName;
-    userData[7] = nomineeAadhaar;
-    userData[8] = nomineeDob;
-    userData[9] = password;
-
-    // Optionally, you can display a success message or perform any other action
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => CaptchaScreen(),
-      ),
-    );
   }
 }

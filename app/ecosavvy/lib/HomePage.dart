@@ -114,7 +114,7 @@ class OrganisationCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(205, 157, 143, 172),
+              color: Color.fromARGB(205, 0, 0, 0),
               spreadRadius: 1,
               blurRadius: 5,
               offset: Offset(0, 3),
@@ -179,12 +179,11 @@ class OrganisationCard extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                FarmScreen(
-                                  farm: farm,
-                                  org: organisation,
-                                  userPortfolio: [],
-                                ),
+                            builder: (context) => FarmScreen(
+                              farm: farm,
+                              org: organisation,
+                              userPortfolio: [],
+                            ),
                           ),
                         );
                       },
@@ -209,11 +208,11 @@ class OrganisationCard extends StatelessWidget {
                               ),
                               color: Color.fromARGB(131, 137, 166, 94),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Center(
@@ -227,8 +226,8 @@ class OrganisationCard extends StatelessWidget {
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
@@ -271,7 +270,8 @@ class OrganisationCard extends StatelessWidget {
 
 // Function to fetch user's portfolio data for the selected farm
 }
-  class CustomSearchDelegate extends SearchDelegate {
+
+class CustomSearchDelegate extends SearchDelegate {
   final List<Organisation> organisations;
 
   CustomSearchDelegate({required this.organisations});
