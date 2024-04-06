@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'FarmScreen.dart';
 import 'fetchapi.dart';
@@ -17,13 +18,38 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<Organisation>> futureOrganisations;
   List<Organisation>? organisations; // Add this line
+  bool isKycDone = false; // Initially assuming KYC is not done
 
   @override
   void initState() {
     super.initState();
+    fetchInvestorDetails();
     futureOrganisations = fetchOrganisations()
       ..then((orgs) =>
           organisations = orgs); // Update the organisations list on fetch
+  }
+  Future<void> fetchInvestorDetails() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse('http://172.16.17.4:3000/investor/details'),
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          isKycDone = data['KYCDone'];
+         // Assuming the API response contains the 'kycdone' boolean
+        });
+        print(isKycDone);
+      } else {
+        // Handle error
+        print('Failed to fetch investor details');
+      }
+    }
   }
 
   @override
@@ -74,12 +100,26 @@ class _HomePageState extends State<HomePage> {
           } else if (snapshot.hasData) {
             return SingleChildScrollView(
               child: Column(
-                children: snapshot.data!
-                    .map((org) => Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: OrganisationCard(organisation: org),
-                        ))
-                    .toList(),
+                children:  [
+                  if (!isKycDone) // Display the container if KYC is not done
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      color: Colors.teal,
+                      child: Text(
+                        'You can start investing once your KYC is done. Usually takes 24-48 Hrs ',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ...snapshot.data!
+                      .map((org) => Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: OrganisationCard(organisation: org),
+                  ))
+                      .toList(),
+                ],
               ),
             );
           } else {

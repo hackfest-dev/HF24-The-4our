@@ -138,7 +138,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            ),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),

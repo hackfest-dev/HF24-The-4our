@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             left: 0,
             right: 0,
             child: Container(
-              color: Color.fromARGB(255, 0, 0, 0),
+              color: const Color.fromARGB(255, 0, 0, 0),
               height: MediaQuery.of(context).size.height * 0.75,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               'assets/1.jpg',
                               fit: BoxFit.contain,
                             ),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -91,19 +91,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'The best app to invest in renewable sources of energy in India today!',
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: const Text(
+                                'The best app to invest in renewable sources of energy in India',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+
+                                  color: Color.fromARGB(
+                                      255, 255, 255, 255),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
                                 ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         GestureDetector(
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       pageBuilder: (context, animation, secondaryAnimation) =>
           screen, // the new screen
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(0.0, 1.0);
+        var begin = const Offset(0.0, 1.0);
         var end = Offset.zero;
         var curve = Curves.bounceInOut;
 
@@ -264,11 +264,11 @@ class WaterPainter extends CustomPainter {
     // Customize this method to draw the water inside the box
     // For simplicity, you can use a path to draw a water-like shape
     final paint = Paint()
-      ..color = Color(0xff252525)
+      ..color = const Color(0xff252525)
       ..style = PaintingStyle.fill;
 
     final path = Path()
-      ..addRect(Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height)))
+      ..addRect(Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height)))
       ..quadraticBezierTo(
           size.width / 2, size.height * 0.2, size.width, size.height * 0.5)
       ..lineTo(size.width, size.height)

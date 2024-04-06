@@ -36,6 +36,7 @@ class _AccountPageState extends State<AccountPage> {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print(data);
         setState(() {
           name = data['name'];
           email = data['email'];
