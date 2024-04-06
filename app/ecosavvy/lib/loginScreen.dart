@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:ecosavvy/Phone_no.dart';
 import 'package:ecosavvy/SignupScreen.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +15,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late Animation<RelativeRect> _animation;
   late Animation<RelativeRect> _bgColorAnimation;
   double rotation = 0.0;
+  bool _isDisposed = false;
 
   @override
   void initState() {
     super.initState();
-    gyroscopeEvents.listen((GyroscopeEvent event) {
-      // Calculate the rotation angle based on the gyroscope data
-      double angle = -atan2(event.y, event.z);
-      setState(() {
-        rotation = angle;
-      });
-    });
+    _isDisposed = false;
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -227,6 +221,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _controller.dispose();
     _bgColorController.dispose();
     super.dispose();

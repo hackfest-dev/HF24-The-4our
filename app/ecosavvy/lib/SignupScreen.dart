@@ -147,6 +147,7 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onPressed: () {
                 if (_pageController.page != 10) {
+
                   _pageController.nextPage(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
