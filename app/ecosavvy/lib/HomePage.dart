@@ -33,8 +33,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
         leading: const Icon(Icons.electric_bolt_rounded, size: 27),
         title: const Text(
-          "Invest in Energy Today!",
-          textAlign: TextAlign.center,
+          "EcoSavvy",
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.w700),
         ),
@@ -105,15 +104,15 @@ class OrganisationCard extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(205, 87, 24,
-              151), // This matches the card's background color for a seamless look.
+          color: Color.fromARGB(99, 75, 75,
+              75), // This matches the card's background color for a seamless look.
           border: Border.all(
-              color: Color.fromARGB(205, 87, 24, 151),
+              color: Color.fromARGB(205, 125, 122, 128),
               width: 1.2), // White border for the main card
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(205, 127, 73, 180), // Shadow color
+              color: Color.fromARGB(205, 157, 143, 172), // Shadow color
               spreadRadius: 1, // Spread radius
               blurRadius: 5, // Blur radius
               offset: Offset(0, 3), // Offset in x and y directions

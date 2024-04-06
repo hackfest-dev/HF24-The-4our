@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecosavvy/Portfolio_farm_details.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'models.dart'; // Import your models
@@ -61,11 +62,11 @@ class _PortfolioPageState extends State<PortfolioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff252525),
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xff252525),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         title: Text(
           "Your Investments",
           textAlign: TextAlign.center,
@@ -79,18 +80,85 @@ class _PortfolioPageState extends State<PortfolioPage> {
               child:
                   CircularProgressIndicator(), // Show a loading indicator while fetching data
             )
-          : ListView.builder(
-              itemCount: userPortfolio.length,
-              itemBuilder: (context, index) {
-                Portfolio portfolio = userPortfolio[index];
-                return ListTile(
-                  title: Text(portfolio.farm.farmName ?? ''),
-                  subtitle: Text(portfolio.farm.location ?? ''),
-                  onTap: () {
-                    // Handle farm item tap
-                  },
-                );
-              },
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: userPortfolio.map((portfolio) {
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to another page here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PortfolioFarmDetailsPage(
+                            portfolio: portfolio,
+                          ), // Replace YourNextPage with the desired page
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Farm Name: ${portfolio.farm.farmName ?? ''}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    '${portfolio.org.orgName}',
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'No. of shares: ${portfolio.investmentDetails.noOfShares}',
+                                    //'${portfolio.investmentDetails.returns}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              top: 20,
+                              right: 20,
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF5803AD),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                height: 50, // Define the height
+                                width: 100, // Define the width
+                                child: Center(
+                                  child: Text(
+                                    '₹ ${portfolio.investmentDetails.returns.toStringAsFixed(3)}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
     );
   }
