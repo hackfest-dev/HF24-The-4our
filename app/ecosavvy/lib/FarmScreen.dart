@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'models.dart';
 import 'dart:math' as math;
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class FarmScreen extends StatefulWidget {
   final Farm farm;
@@ -15,118 +15,191 @@ class FarmScreen extends StatefulWidget {
   _FarmScreenState createState() => _FarmScreenState();
 }
 
-class _FarmScreenState extends State<FarmScreen> {
-  List<TimeSeriesData> _chartData = []; // Track chart data for display
+class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
+  late List<TimeSeriesData> _chartData = []; // Initialize _chartData to an empty list
   final List<String> _timeOptions = ['1D', '1M', '6M', '1Y', 'All'];
   String _selectedTimeOption = '1D';
   double _maxYValue = 1.0; // Initialize maximum Y value
-  int _numHoursToShow = 24; // Number of hours to show initially
-  double _primaryXAxisLabelInterval = 1; // Interval for X-axis labels
+  double _primaryXAxisVisibleMaximum = 24.0; // Initial visible maximum for 1D option
+  double _primaryXAxisInterval = 3.0; // Initial interval for 1D option
+  bool _isLoading = false; // Flag to track loading state
+  late TabController _tabController;
+  late PageController _pageController;
+  int _selectedTabIndex = 0;
+  String _tooltipText = '';
+  Offset _tooltipPosition = Offset.zero;
+
 
   @override
   void initState() {
     super.initState();
-    // Fetch initial chart data
-    fetchData();
+    // Initialize chart data with data from API for the selected time option
+    _fetchDataForTimeOption(_selectedTimeOption);
+    _tabController = TabController(length: 3, vsync: this);
+    _pageController = PageController(initialPage: 0);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabSelection() {
+    setState(() {
+      _selectedTabIndex = _tabController.index;
+    });
+    _pageController.animateToPage(
+      _selectedTabIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        backgroundColor: Color(0xff252525),
-        primaryColor: Colors.lightGreenAccent,
-        scaffoldBackgroundColor: Color(0xff252525),
-        textTheme: TextTheme(
-          bodyText1: TextStyle(color: Colors.white),
-          bodyText2: TextStyle(color: Colors.white),
-        ),
+    // Apply the theme
+    final ThemeData theme = Theme.of(context).copyWith(
+      backgroundColor: Color(0xff252525), // Set background color
+      primaryColor: Colors.lightGreenAccent, // Set primary color
+      scaffoldBackgroundColor: Color(0xff252525), // Set scaffold background color
+      textTheme: Theme.of(context).textTheme.copyWith(
+        bodyText1: TextStyle(color: Colors.white), // Set text color
+        bodyText2: TextStyle(color: Colors.white), // Set text color
       ),
+    );
+
+    return Theme(
+      data: theme,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.farm.name),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: 300, // Adjust height as needed
-                child: SfCartesianChart(
-                  borderWidth: 0,
-                  plotAreaBorderWidth: 0,
-                  primaryXAxis: CategoryAxis(
-                    visibleMaximum: _numHoursToShow.toDouble(),
-                    majorGridLines: MajorGridLines(width: 0),
-                    labelIntersectAction: _selectedTimeOption == '1D'
-                        ? AxisLabelIntersectAction.rotate45
-                        : AxisLabelIntersectAction
-                            .none, // Rotate labels for 1D option
-                    labelPlacement: LabelPlacement.onTicks,
-                    interval: _primaryXAxisLabelInterval,
-                    labelStyle: TextStyle(fontSize: 12),
-                  ),
-                  primaryYAxis: NumericAxis(
-                    minimum: 0,
-                    maximum: _maxYValue,
-                    majorGridLines: MajorGridLines(width: 0),
-                    title: AxisTitle(
-                      text: 'Energy Generated',
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(height: 80,),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Text(
+                    widget.farm.name,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  series: <ChartSeries>[
-                    LineSeries<TimeSeriesData, String>(
-                      dataSource: _chartData,
-                      xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                      yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                    )
-                  ],
-                ),
+
+                ],
               ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: _timeOptions.map((option) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedTimeOption = option;
-                          fetchData(); // Fetch data for the selected time option
-                        });
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            SizedBox(
+                height: 300, // Adjust height as needed
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      onTapDown: (TapDownDetails details) {
+                        final dynamic xPos = (details.localPosition.dx /
+                            context.size!.width) *
+                            _primaryXAxisVisibleMaximum;
+                        final int nearestIndex = (xPos.round()).clamp(
+                            0, _chartData.length - 1);
+                        final TimeSeriesData dataPoint = _chartData[nearestIndex];
+                        showTooltip(dataPoint.time, dataPoint.value, details.localPosition);
                       },
-                      style: ElevatedButton.styleFrom(
-                        primary: _selectedTimeOption == option
-                            ? Colors.lightGreen
-                            : Colors.grey, // Change color based on selection
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                      ),
-                      child: Text(
-                        option,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                      child: SfCartesianChart(
+                        plotAreaBorderWidth: 0,
+                        borderWidth: 0,
+                        plotAreaBorderColor: Colors.lightGreen,
+                        primaryXAxis: CategoryAxis(
+                          majorGridLines: MajorGridLines(width: 0),
+                          minorGridLines: MinorGridLines(width: 0),
+                          isVisible: false
+                        ),
+                        primaryYAxis: NumericAxis(
+                          majorGridLines: MajorGridLines(width: 0),
+                          minorGridLines: MinorGridLines(width: 0),
+                          isVisible: false
+                        ),
+                        series: <ChartSeries>[
+                          LineSeries<TimeSeriesData, String>(
+                            dataSource: _chartData,
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                          )
+                        ],
+                        crosshairBehavior: CrosshairBehavior(
+                          lineType: CrosshairLineType.both,
+                          lineColor: Colors.grey,
+                          lineWidth: 1,
+                          enable: true,
+                          activationMode: ActivationMode.singleTap,
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                    ),
+                    Positioned(
+                      left: _tooltipPosition.dx - 50,
+                      top: _tooltipPosition.dy - 50,
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          _tooltipText,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+
+            ),
+            SizedBox(height: 20),
+            TabBar(
+              indicatorColor: Colors.lightGreen,
+              controller: _tabController,
+              tabs: [
+                Tab(text: 'Details'),
+                Tab(text: 'News'),
+                Tab(text: 'My Shares'),
+              ],
+            ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  _tabController.animateTo(index);
+                },
+                children: [
+                  // Details Tab
+                  Center(child: Text('Details Tab')),
+                  // News Tab
+                  Center(child: Text('News Tab')),
+                  // My Shares Tab
+                  Center(child: Text('My Shares Tab')),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Future<void> fetchData() async {
+  // Function to fetch data from API for the selected time option
+  Future<void> _fetchDataForTimeOption(String timeOption) async {
+    setState(() {
+      _isLoading = true; // Set loading state to true
+    });
+
     // Construct the API endpoint URL based on selected time option
-    String url = 'http://172.16.17.4:3000/fetch/${widget.farm.id}/returns';
-    if (_selectedTimeOption != 'All') {
-      url += '?duration=$_selectedTimeOption';
-    }
+    String url = 'http://172.16.17.4:3000/fetch/${widget.farm.id}/returns?duration=$timeOption';
 
     // Make HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -141,61 +214,88 @@ class _FarmScreenState extends State<FarmScreen> {
       for (var item in rawData) {
         data.add(TimeSeriesData(
           item['timestamp'], // Use 'timestamp' field as time
-          double.parse(item['energyGeneratedKilowattHours']
-              .toString()), // Parse energyGeneratedKilowattHours to double
+          double.parse(item['energyGeneratedKilowattHours'].toString()), // Parse energyGeneratedKilowattHours to double
         ));
       }
+      List<TimeSeriesData> processData(List<TimeSeriesData> rawData) {
+        // Extract hour from the timestamp and create new TimeSeriesData objects
+        List<TimeSeriesData> processedData = rawData.map((data) {
+          String hour = data.time.split('T')[1].split(':')[0];
+          return TimeSeriesData(hour, data.value);
+        }).toList();
 
+        return processedData;
+      }
       // Update state with fetched data
       setState(() {
-        _chartData = data;
+        _chartData = processData(data);
         _updateMaxYValue(_chartData); // Update maximum Y value
-        _updateAxisLabels(_selectedTimeOption); // Update axis labels
+        _updateXAxisOptions(_selectedTimeOption); // Update X-axis options based on selected time option
+        _updateVisibleRange(); // Update visible range
+        _isLoading = false; // Set loading state to false
       });
     } else {
       // Handle error
       print('Failed to fetch data: ${response.statusCode}');
       // Optionally, you can show an error message to the user
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
     }
   }
 
   // Function to update maximum Y value based on chart data
   void _updateMaxYValue(List<TimeSeriesData> data) {
-    double max =
-        data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
+    double max = data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
     setState(() {
       _maxYValue = max;
     });
   }
 
-  // Function to update X-axis labels based on selected time option
-  void _updateAxisLabels(String selectedTimeOption) {
+  // Function to update X-axis options based on selected time option
+  void _updateXAxisOptions(String selectedTimeOption) {
     setState(() {
       switch (selectedTimeOption) {
         case '1D':
-          _primaryXAxisLabelInterval = 1; // Show hourly labels
+          _primaryXAxisVisibleMaximum = 24.0;
+          _primaryXAxisInterval = 3.0; // Show hourly labels with an interval of 3 hours
           break;
         case '1M':
-          _primaryXAxisLabelInterval = 5; // Show 5 day interval labels
+          _primaryXAxisVisibleMaximum = 24 * 30.0;
+          _primaryXAxisInterval = 5 * 24.0; // Show 5 day interval labels
           break;
         case '6M':
-          _primaryXAxisLabelInterval = 1; // Show monthly labels
+          _primaryXAxisVisibleMaximum = 24 * 30 * 6.0;
+          _primaryXAxisInterval = 30 * 24 * 3.0; // Show monthly labels with an interval of 3 months
           break;
         case '1Y':
+          _primaryXAxisVisibleMaximum = 24 * 365.0;
+          _primaryXAxisInterval = 30 * 24 * 3 * 4.0; // Show yearly labels with an interval of 4 years
+          break;
         case 'All':
-          _primaryXAxisLabelInterval = 1; // Show yearly labels (every month)
+          _primaryXAxisVisibleMaximum = _chartData.length.toDouble();
+          _primaryXAxisInterval = 30 * 24 * 3 * 4 * 10.0; // Show labels for every 10 years for all data
           break;
         default:
-          _primaryXAxisLabelInterval = 1;
+          _primaryXAxisInterval = 1.0;
       }
     });
   }
-}
 
-// Model class for time series data
-class TimeSeriesData {
-  final String time;
-  final double value;
+  // Function to update visible range based on the selected time option
+  void _updateVisibleRange() {
+    setState(() {
+      // Reset the visible range to show the latest data
+      if (_selectedTimeOption == 'All') {
+        _primaryXAxisVisibleMaximum = _chartData.length.toDouble();
+      }
+    });
+  }
+  void showTooltip(String time, double value, Offset tapPosition) {
+    setState(() {
+      _tooltipText = 'Time: $time:00 hrs\nEnergy: ${value.toStringAsFixed(2)} kwh';
+      _tooltipPosition = tapPosition;
+    });
+  }
 
-  TimeSeriesData(this.time, this.value);
 }
