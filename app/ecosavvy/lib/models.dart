@@ -264,7 +264,7 @@ class InvestmentDetails {
       noOfShares: json['noOfShares'],
       sharePrice: json['sharePrice'],
       transactionID: json['transactionID'],
-      returns: json['returns'],
+      returns: json['returns'].toDouble(),
       timestamp: json['timestamp'],
     );
   }
