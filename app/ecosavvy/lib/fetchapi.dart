@@ -5,8 +5,8 @@ final String URL = 'http://172.16.17.4:3000/fetch/getallorgs';
 
 Future<List<Organisation>> fetchOrganisations() async {
   final response = await http.get(Uri.parse(URL));
-
-  if (response.statusCode == 200) {
+  print(response);
+  if (response.statusCode == 200 || response.statusCode== 201) {
     List jsonResponse = await json.decode(response.body);
     // Print the decoded JSON response for debugging
     print('Decoded JSON Response: $jsonResponse');

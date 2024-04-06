@@ -322,27 +322,29 @@ class _MyPageViewState extends State<MyPageView> {
     Map<String, dynamic> userDataMap = {
       "name": name,
       "email": email,
-      "phoneNumber": phone,
-      "panNumber": pan,
-      "aadhar": aadhar,
-      "permantAddress": address,
-      "dateOfBirth": dob,
-      "nomineeName": nomineeName,
-      "nomineeAadhaar": nomineeAadhaar,
-      "nomineeDob": nomineeDob,
       "password": password,
+      "phoneNumber": phone,
+      "permanentAddress": address,
+      "panNumber": pan,
+      "dateOfBirth": dob,
+      "nomineeDetails": {
+        "nomineeName": nomineeName,
+        "nomineeAadhar": nomineeAadhaar,
+        "dateOfBirth": nomineeDob,
+      },
+      "aadharNumber": aadhar,
     };
 
     // Send a POST request to the server
     var url = Uri.parse('http://172.16.17.4:3000/investor/signup');
     var response = await http.post(
       url,
-      body: jsonEncode(userDataMap), // Encode user data as JSON
-      headers: {'Content-Type': 'application/json'}, // Set headers
+      body: jsonEncode(userDataMap),
+      headers: {'Content-Type': 'application/json'},
     );
 
     // Check if the request was successful (status code 200)
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 201) {
       // Parse the response body (assuming it's JSON)
       var responseBody = jsonDecode(response.body);
 
@@ -352,7 +354,7 @@ class _MyPageViewState extends State<MyPageView> {
       // Save the token using SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token); // Save the token
-
+      print(token);
       // Optionally, navigate to the next screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

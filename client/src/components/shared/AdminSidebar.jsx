@@ -1,6 +1,6 @@
 import React from 'react'
 import { PiTreeEvergreenFill } from "react-icons/pi";
-import { DASHBOARD_SIDEBAR_LINKS, DASHBOARD_SIDEBAR_LINKS_BOTTOM } from '../../consts/navigation';
+import { ADMIN_DASHBOARD_SIDEBAR_LINKS, DASHBOARD_SIDEBAR_LINKS_BOTTOM } from '../../consts/navigation';
 import {Link} from 'react-router-dom'
 
 const linkClasses = "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underine"
@@ -16,7 +16,7 @@ export default function AdminSidebar() {
         </div>
       </div>
       <div className='flex-1 pl-2 pt-10'>
-        {DASHBOARD_SIDEBAR_LINKS.map((item) => (
+        {ADMIN_DASHBOARD_SIDEBAR_LINKS.map((item) => (
           <SidebarLink key={item.key} item={item}/>
         ))}
       </div>

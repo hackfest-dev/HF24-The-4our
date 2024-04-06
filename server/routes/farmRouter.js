@@ -1,6 +1,7 @@
 const express = require("express");
 
 const farmRouter = express.Router();
+const { verifyToken } = require("../middlewares/authorization");
 
 const {
   createFarm,
@@ -8,7 +9,7 @@ const {
   storeSyntheticData,
 } = require("../controllers/farmController");
 
-farmRouter.post("/create", createFarm);
+farmRouter.post("/create", verifyToken, createFarm);
 
 farmRouter.post("/storereturns", storeReturnsData);
 

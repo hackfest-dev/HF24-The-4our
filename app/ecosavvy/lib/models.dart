@@ -6,14 +6,16 @@ class Organisation {
   final String email;
   final String permanentaddress;
   final int marketcap;
-  Organisation(
-      {required this.id,
-      required this.name,
-      required this.farms,
-      required this.desc,
-      required this.email,
-      required this.marketcap,
-      required this.permanentaddress});
+
+  Organisation({
+    required this.id,
+    required this.name,
+    required this.farms,
+    required this.desc,
+    required this.email,
+    required this.permanentaddress,
+    required this.marketcap,
+  });
 
   factory Organisation.fromJson(Map<String, dynamic> json) {
     var farmsList = json['farms'] as List;
@@ -99,22 +101,23 @@ class Farm {
       eachSharePrice: json['eachSharePrice'],
       govtSubsidy: json['govtSubsidy'],
       orgInvestment: json['orgInvestment'],
-      orgInvestmentPercent: json['orgInvestmentPercent'],
+      orgInvestmentPercent: (json['orgInvestmentPercent'] as num).toDouble(), // Cast to double
       expectedEnergyOutput: json['expectedEnergyOutput'],
       energyUnit: json['energyUnit'],
       description: json['description'],
-      govtEquityPercent: json['govtEquityPercent'],
-      govtEnergyOutput: json['govtEnergyOutput'],
-      investorEquityPercent: json['investorEquityPercent'],
-      investorEnergyOutput: json['investorEnergyOutput'],
-      energyPerShare: json['energyPerShare'],
-      orgEnergyOutput: json['orgEnergyOutput'],
+      govtEquityPercent: (json['govtEquityPercent'] as num).toDouble(), // Cast to double
+      govtEnergyOutput: (json['govtEnergyOutput'] as num).toDouble(), // Cast to double
+      investorEquityPercent: (json['investorEquityPercent'] as num).toDouble(), // Cast to double
+      investorEnergyOutput: (json['investorEnergyOutput'] as num).toDouble(), // Cast to double
+      energyPerShare: (json['energyPerShare'] as num).toDouble(), // Cast to double
+      orgEnergyOutput: (json['orgEnergyOutput'] as num).toDouble(), // Cast to double
       farmReady: json['farmReady'],
       farmExpectedReadyDate: json['farmExpectedReadyDate'],
       expectedDateOfReturns: json['expectedDateOfReturns'],
     );
   }
 }
+
 
 class OrganisationFarm {
   final String? farmName;

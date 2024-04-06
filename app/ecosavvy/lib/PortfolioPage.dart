@@ -4,6 +4,7 @@ import 'package:ecosavvy/Portfolio_farm_details.dart';
 import 'package:ecosavvy/fetchapi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart'; // Import your models
 
 class PortfolioPage extends StatefulWidget {
@@ -30,8 +31,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   }
 
   Future<void> fetchUserPortfolio() async {
-    final String userToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU'; // Assuming userToken is available
+    final String? userToken = await _getToken() ;
     final String apiUrl = 'http://172.16.17.4:3000/investor/portfolio';
 
     try {
@@ -66,7 +66,10 @@ class _PortfolioPageState extends State<PortfolioPage> {
       print('Error fetching user portfolio: $e');
     }
   }
-
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

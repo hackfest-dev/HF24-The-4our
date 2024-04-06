@@ -7,7 +7,7 @@ const createFarm = async (req, res, next) => {
   try {
     const {
       farmName,
-      orgId,
+      orgID,
       Location,
       energyCategory,
       farmValuation: farmValuationStr,
@@ -54,7 +54,7 @@ const createFarm = async (req, res, next) => {
     const maintenanceCostPercent = 10;
 
     const existingFarm = await Farm.findOne({
-      $and: [{ farmName }, { orgId }],
+      $and: [{ farmName }, { orgID }],
     });
     if (existingFarm) {
       return res.status(400).json({
@@ -74,7 +74,7 @@ const createFarm = async (req, res, next) => {
     // Create a new farm document
     const newFarm = new Farm({
       farmName,
-      orgId,
+      orgId: orgID,
       farmID,
       Location,
       energyCategory,

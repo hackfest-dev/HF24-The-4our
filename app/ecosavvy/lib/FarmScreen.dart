@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'models.dart';
 import 'dart:math' as math;
@@ -536,7 +537,13 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     );
   }
 
-  void _buyShares(int sharesToBuy) {
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getString('token'));
+    return prefs.getString('token');
+  }
+
+  void _buyShares(int sharesToBuy) async{
     setState(() {
       isLoading = true;
     });
@@ -548,8 +555,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
 
     // Send a request to the specified URL with the required attributes
     final String apiUrl = 'http://172.16.17.4:3000/investor/invest';
-    final String userToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
+    final String? userToken = await _getToken();
 
     http
         .post(
