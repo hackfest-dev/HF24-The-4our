@@ -69,3 +69,23 @@ export const DASHBOARD_SIDEBAR_LINKS_BOTTOM = [
         icon: <MdLogout/>
     },    
 ]
+export const ADMIN_DASHBOARD_SIDEBAR_LINKS_BOTTOM = [
+        {
+        key: 'adminsettings',
+        label: 'Settings',
+        path: '/adminsettings',
+        icon: <IoMdSettings/>
+    },
+    {
+        key: 'help',
+        label: 'Help',
+        path: '/help',
+        icon: <IoIosHelpCircleOutline/>
+    },
+    {
+        key: 'logout',
+        label: 'Logout',
+        path: '/logout',
+        icon: <MdLogout/>
+    },    
+]

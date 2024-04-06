@@ -24,7 +24,7 @@ export default function Navbar() {
                     </div>
                 </div>
                 <div class="relative flex items-center justify-end w-1/4 p-1 ml-5 mr-4 sm:mr-0 sm:right-auto">
-                    <Link to='./' class="relative block">
+                    <Link to='./profile' class="relative block">
                         <img alt="profile" src={profile} class="mx-auto object-cover rounded-full h-10 w-10 "/>
                     </Link>
                 </div>
