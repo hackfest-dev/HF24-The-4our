@@ -2,7 +2,7 @@ import React from 'react';
 
 const Help = () => {
   return (
-    <div className="w-1/2 bg-white rounded-xl shadow-md overflow-hidden mt-40 mx-auto">
+    <div className="w-1/2 bg-base-200 rounded-xl shadow-md overflow-hidden mt-40 mx-auto ml-[450px]">
       <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
         <form>
@@ -12,7 +12,7 @@ const Help = () => {
               type="text"
               id="name"
               name="name"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="p-1 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
               placeholder="Enter your name"
             />
           </div>
@@ -22,7 +22,7 @@ const Help = () => {
               type="email"
               id="email"
               name="email"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="p-1 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
               placeholder="Enter your email"
             />
           </div>
@@ -32,7 +32,7 @@ const Help = () => {
               id="message"
               name="message"
               rows="3"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="p-1 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
               placeholder="Enter your message"
             ></textarea>
           </div>

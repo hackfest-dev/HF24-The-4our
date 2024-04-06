@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 export default function AdminNavbar() {
   return (
    
-<header class="z-40 items-center w-5/6 mx-auto overflow-hidden h-16 bg-white shadow-lg fixed ml-60">
+<header class="z-40 items-center w-5/6 mx-auto overflow-hidden h-16 bg-neutral-900 shadow-lg fixed ml-60">
     <div class="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
         <div class="relative flex items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div class="container relative left-0 z-50 flex w-3/4 h-auto h-full">

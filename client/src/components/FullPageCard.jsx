@@ -78,117 +78,117 @@ export default function FullPageCard() {
   return (
     <div className="flex flex-col mt-20">
       <div className="flex flex-row">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-80 pt-0 w-5/6">
-          <div>
-            <div className="px-4 sm:px-0">
-              <h3 className="text-base font-semibold leading-7 text-gray-900">
-                Farm Information
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-                Details about the farm.
-              </p>
-            </div>
-            <div className="mt-6 border-t border-gray-100">
-              <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Farm ID
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.farmID}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Farm Name
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.farmName}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Energy Category
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.energyCategory}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Location
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.Location}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-80 pt-0 w-5/6">
+    <div>
+      <div className="px-4 sm:px-0">
+        <h3 className="text-base font-semibold leading-7 text-gray-300">
+          Farm Information
+        </h3>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
+          Details about the farm.
+        </p>
+      </div>
+      <div className="mt-6 border-t border-gray-100">
+        <dl className="divide-y divide-gray-100">
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Farm ID
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.farmID}
+            </dd>
           </div>
-          <div>
-            <div className="px-4 sm:px-0">
-              <h3 className="text-base font-semibold leading-7 text-gray-900">
-                Financial Information
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-500">
-                Financial details about the farm.
-              </p>
-            </div>
-            <div className="mt-6 border-t border-gray-100">
-              <dl className="divide-y divide-gray-100">
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Farm Valuation
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    ${farm.farmValuation}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Total Investors
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.totalInvestors}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Number of Shares
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.numberOfShares}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Available Shares
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    {farm.availableShares}
-                  </dd>
-                </div>
-                <div className="px-4 py-6">
-                  <dt className="text-sm font-medium leading-6 text-gray-900">
-                    Each Share Price
-                  </dt>
-                  <dd className="mt-1 text-sm leading-6 text-gray-700">
-                    ${farm.eachSharePrice}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Farm Name
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.farmName}
+            </dd>
           </div>
-        </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Energy Category
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.energyCategory}
+            </dd>
+          </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Location
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.Location}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    <div>
+      <div className="px-4 sm:px-0">
+        <h3 className="text-base font-semibold leading-7 text-gray-300">
+          Financial Information
+        </h3>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
+          Financial details about the farm.
+        </p>
+      </div>
+      <div className="mt-6 border-t border-gray-100">
+        <dl className="divide-y divide-gray-100">
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Farm Valuation
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              ${farm.farmValuation}
+            </dd>
+          </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Total Investors
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.totalInvestors}
+            </dd>
+          </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Number of Shares
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.numberOfShares}
+            </dd>
+          </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Available Shares
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              {farm.availableShares}
+            </dd>
+          </div>
+          <div className="px-4 py-6">
+            <dt className="text-sm font-medium leading-6 text-gray-300">
+              Each Share Price
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-gray-400">
+              ${farm.eachSharePrice}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
 
-        <div className="flex flex-col w-1/2 pl-20">
+        <div className="flex flex-col w-1/2 pl-20 mr-10">
           {farm.news?.map((newsItem) => (
             <div
               key={newsItem.id}
-              className="w-1/2 bg-white rounded-xl shadow-md overflow-hidden m-5"
+              className="w-full bg-base-200 rounded-xl shadow-md overflow-hidden m-5"
             >
               <div className="p-8">
-                <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+                <div className="uppercase tracking-wide text-sm text-[#747FFF] font-semibold">
                   {newsItem}
                 </div>
               </div>
@@ -200,12 +200,12 @@ export default function FullPageCard() {
       <div className="w-2/3 ml-72">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-md rounded px-8 pb-8 mb-4"
+          className="bg-base-200 shadow-md rounded px-8 pb-8 mb-4"
         >
           <div className="mb-4">
             <label
               htmlFor="textInput"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-gray-300 text-sm font-bold mb-2 pt-2"
             >
               Enter News:
             </label>
@@ -215,13 +215,13 @@ export default function FullPageCard() {
               value={news}
               onChange={handleChange}
               placeholder="Type something..."
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-[#747FFF] hover:bg-blue-700 text-gray-300 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Submit
             </button>

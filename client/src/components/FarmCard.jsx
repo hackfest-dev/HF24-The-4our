@@ -10,9 +10,9 @@ const FarmCard = ({ imageUrl, title, category, location}) => {
           src={imageUrl}
           className="object-cover w-full max-h-40"
         />
-        <div className="w-full p-4 bg-white">
-          <p className="font-medium text-indigo-500 text-md">{title}</p>
-          <p className="mb-2 text-xl font-medium text-gray-800">{category}</p>
+        <div className="w-full p-4 bg-base-200">
+          <p className="font-medium text-[#747FFF] text-md">{title}</p>
+          <p className="mb-2 text-xl font-medium text-gray-500">{category}</p>
           <p className="font-light text-gray-400 text-md">{location}</p>
           <div className="flex items-center mt-4">
             </div>

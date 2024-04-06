@@ -225,7 +225,7 @@ export default function FarmForm() {
             name="farmExpectedReadyDate"
             value={formData.farmExpectedReadyDate}
             onChange={handleInputChange}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            className="block py-2.5 px-0 w-full text-sm text-gray-400 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder="Farm expected ready date"
             required
           />
@@ -236,7 +236,7 @@ export default function FarmForm() {
             name="expectedDateOfReturns"
             value={formData.expectedDateOfReturns}
             onChange={handleInputChange}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            className="block py-2.5 px-0 w-full text-sm text-gray-400 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder="Farm expected date of returns"
             required
           />
@@ -272,11 +272,11 @@ export default function FarmForm() {
             onChange={(e) =>
               setFormData({ ...formData, farmReady: e.target.checked })
             }
-            className="peer h-4 w-4 border-gray-300 rounded focus:ring-blue-500 text-blue-600"
+            className="peer h-4 w-4 border-gray-300 rounded focus:ring-blue-500 text-gray-400"
           />
           <label
             htmlFor="Farm Ready"
-            className="ml-2 text-sm font-medium text-gray-700"
+            className="ml-2 text-sm font-medium text-gray-400"
           >
             Farm Ready
           </label>
@@ -284,7 +284,7 @@ export default function FarmForm() {
       </div>
       <button
         type="submit"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ="
+        className="text-white bg-[#747FFF] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ="
       >
         Submit
       </button>
