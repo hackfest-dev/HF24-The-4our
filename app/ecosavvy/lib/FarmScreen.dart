@@ -20,7 +20,6 @@ class FarmScreen extends StatefulWidget {
 class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   late List<TimeSeriesData> _chartData =
       []; // Initialize _chartData to an empty list
-  final List<String> _timeOptions = ['1D', '1M', '6M', '1Y', 'All'];
   String _selectedTimeOption = '1D';
   double _maxYValue = 1.0; // Initialize maximum Y value
   double _primaryXAxisVisibleMaximum =
@@ -110,16 +109,24 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   children: [
                     GestureDetector(
                       onTapDown: (TapDownDetails details) {
-                        final dynamic xPos =
-                            (details.localPosition.dx / context.size!.width) *
-                                _primaryXAxisVisibleMaximum;
-                        final int nearestIndex =
-                            (xPos.round()).clamp(0, _chartData.length - 1);
-                        final TimeSeriesData dataPoint =
-                            _chartData[nearestIndex];
-                        showTooltip(dataPoint.time, dataPoint.value,
-                            details.localPosition);
+                        final double xPos = details.localPosition.dx;
+
+                        // Calculate index of the nearest data point based on the tap position
+                        final int nearestIndex = (xPos / context.size!.width * _chartData.length).round();
+
+                        // Ensure that the index is within valid bounds
+                        if (nearestIndex >= 0 && nearestIndex < _chartData.length) {
+                          final TimeSeriesData dataPoint = _chartData[nearestIndex];
+
+                          // Use the energy value from the TimeSeriesData directly
+                          final double energyValue = dataPoint.value;
+
+                          // Use the obtained energyValue along with the time value in your tooltip or wherever it's needed
+                          showTooltip(dataPoint.time, energyValue, details.localPosition);
+                        }
                       },
+
+
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
                         borderWidth: 0,
@@ -127,29 +134,38 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            isVisible: false
+                        ),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            isVisible: false
+                        ),
                         series: <ChartSeries>[
-                          LineSeries<TimeSeriesData, String>(
+                          ScatterSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) =>
-                                sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) =>
-                                sales.value,
-                            color: Color.fromARGB(186, 162, 204, 98),
-                          )
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            markerSettings: MarkerSettings(
+                              borderWidth: 0.0,
+                              isVisible: true,
+                              color: Color.fromARGB(255, 0, 255, 247),
+                              width: 9,
+                              height: 9,
+                              shape: DataMarkerType.circle,
+                            ),
+                          ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
-                            lineType: CrosshairLineType.both,
-                            lineColor: Colors.grey,
-                            lineWidth: 1,
-                            enable: true,
-                            activationMode: ActivationMode.singleTap,
-                            lineDashArray: [5, 5]),
+                          lineType: CrosshairLineType.both,
+                          lineColor: Colors.grey,
+                          lineWidth: 1,
+                          enable: true,
+                          activationMode: ActivationMode.singleTap,
+                          lineDashArray: [5, 5],
+                        ),
                       ),
+
                     ),
                     Positioned(
                       left: _tooltipPosition.dx - 50,
@@ -249,10 +265,12 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       // Parse response JSON
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       List<dynamic> rawData = jsonData['data'];
+
       List<TimeSeriesData> data = [];
 
       // Convert JSON data to TimeSeriesData objects
       for (var item in rawData) {
+        print(item);
         data.add(TimeSeriesData(
           item['timestamp'], // Use 'timestamp' field as time
           double.parse(item['energyGeneratedKilowattHours']

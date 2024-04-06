@@ -114,30 +114,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-//                       Container(
-//   width: 800, // Adjust width as needed
-//   height: 750, // Adjust height as needed
-//   color: Colors.red,
-//   child: Image.asset(
-//     'assets/your_image.png', // Replace 'your_image.png' with your actual image asset path
-//     fit: BoxFit.cover, // Adjust the fit as needed
-//   ),
-// ),
-
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 1.00,
-                      //   height: MediaQuery.of(context).size.width * 1.00,
-                      //   color: Color.fromARGB(255, 255, 255, 255),
-                      //   child: Image.asset(
-                      //     'assets/2.jpg',
-                      //     fit: BoxFit.fill,
-                      //   ),
-                      // ),
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 1.00,
-                      //   height: MediaQuery.of(context).size.width * 1.00,
-                      //   color: Color.fromARGB(255, 143, 181, 212),
-                      // ),
                     ],
                   ),
                 ],
