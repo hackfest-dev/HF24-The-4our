@@ -96,7 +96,9 @@ class _EmailPasswordPageState extends State<EmailPasswordPage> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.white),
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30)
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
                 ),
@@ -110,7 +112,9 @@ class _EmailPasswordPageState extends State<EmailPasswordPage> {
               decoration: InputDecoration(
                 labelText: 'Password',
                 labelStyle: TextStyle(color: Colors.white),
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30)
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
                 ),
