@@ -4,7 +4,29 @@ import {IoAdd} from 'react-icons/io5'
 import { IoMdSettings } from "react-icons/io";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
 
+
+export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
+    {
+        key: 'admindashboard',
+        label: 'Admin Dashboard',
+        path: '/admin',
+        icon: <HiOutlineViewGrid/>
+    },
+    {
+        key: 'adminfarms',
+        label: 'Admin Farms',
+        path: '/adminfarms',
+        icon: <TbSolarPanel2/>
+    },
+    {
+        key: 'createfarms',
+        label: 'Approve Farms',
+        path: '/approvefarms',
+        icon: <FaCheck/>
+    },
+]
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
@@ -21,7 +43,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     },
     {
         key: 'createfarms',
-        label: 'CreateFarms',
+        label: 'Create Farms',
         path: '/createfarms',
         icon: <IoAdd/>
     },

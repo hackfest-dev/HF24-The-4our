@@ -2,7 +2,7 @@ import React from 'react'
 import profile from '../../images/profile.avif'
 import { Link } from 'react-router-dom'
 
-export default function Navbar() {
+export default function AdminNavbar() {
   return (
    
 <header class="z-40 items-center w-5/6 mx-auto overflow-hidden h-16 bg-white shadow-lg fixed ml-60">
