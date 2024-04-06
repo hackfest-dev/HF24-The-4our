@@ -1,89 +1,67 @@
-import 'package:ecosavvy/otp_page.dart';
+import 'dart:convert';
+import 'package:ecosavvy/defaultScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ecosavvy/otp_page.dart'; // Import the OTP page or any other page to navigate to after authentication
 
-class PhoneNumberPage extends StatefulWidget {
+class EmailPasswordPage extends StatefulWidget {
   @override
-  _PhoneNumberPageState createState() => _PhoneNumberPageState();
+  _EmailPasswordPageState createState() => _EmailPasswordPageState();
 }
 
-class _PhoneNumberPageState extends State<PhoneNumberPage> {
-  TextEditingController _phoneNumberController = TextEditingController();
-  late List<TextEditingController> controllers;
+class _EmailPasswordPageState extends State<EmailPasswordPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    controllers = List.generate(10, (_) => TextEditingController());
-  }
+  void _authenticateUser() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
 
-  String? _validatePhoneNumber(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your phone number';
-    } else if (value.length != 10) {
-      return 'Phone number should be 10 digits';
-    }
-    return null;
-  }
+    // Validate email and password here if needed
 
-  Widget _buildNumberInputFields() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(10, (index) {
-        return Row(
-          children: [
-            SizedBox(
-              width: 2.0, // Add a gap between each box
-            ),
-            Container(
-              width: 33,
-              height: 55,
-              child: TextField(
-                controller: controllers[index],
-                maxLength: 1,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  counterText: "",
-                  border: OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                ),
-                onChanged: (value) {
-                  if (value.length == 1 && index < 9) {
-                    FocusScope.of(context).nextFocus();
-                  }
-                  _updatePhoneNumber();
-                },
-              ),
-            ),
-          ],
-        );
-      }),
-    );
-  }
-
-  void _updatePhoneNumber() {
-    String phoneNumber = '';
-    for (int i = 0; i < 10; i++) {
-      phoneNumber += controllers[i].text;
-    }
-    setState(() {
-      _phoneNumberController.text = phoneNumber;
-    });
-  }
-
-  void _redirectToNextPage() {
-    if (_phoneNumberController.text.length == 10) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OtpPage()),
+    // Make API call to authenticate user
+    final String apiUrl = 'http://172.16.17.4:3000/investor/login'; // Replace with your API endpoint
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       );
-    } else {
+
+      if (response.statusCode == 200) {
+        // Authentication successful
+        // Extract token from response
+        String token = jsonDecode(response.body)['token'];
+
+        // Store token in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+
+        // Navigate to the next page (e.g., OTP page)
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your desired next page
+        );
+      } else {
+        // Authentication failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Authentication failed. Please try again.'),
+          ),
+        );
+      }
+    } catch (e) {
+      // Error handling
+      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please enter a valid phone number'),
+          content: Text('An error occurred. Please try again later.'),
         ),
       );
     }
@@ -94,6 +72,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
+        title: Text('Email and Password'),
       ),
       backgroundColor: Colors.black,
       body: Padding(
@@ -101,15 +80,36 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Please enter your phone number:',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              style: TextStyle(color: Colors.white),
+              keyboardType: TextInputType.emailAddress,
             ),
             SizedBox(height: 20.0),
-            _buildNumberInputFields(),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              style: TextStyle(color: Colors.white),
+              obscureText: true,
+            ),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _redirectToNextPage,
+              onPressed: _authenticateUser,
               style: ElevatedButton.styleFrom(
                 primary: Colors.purple,
               ),
