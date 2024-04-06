@@ -8,12 +8,12 @@ class Organisation {
   final int marketcap;
   Organisation(
       {required this.id,
-        required this.name,
-        required this.farms,
-        required this.desc,
-        required this.email,
-        required this.marketcap,
-        required this.permanentaddress});
+      required this.name,
+      required this.farms,
+      required this.desc,
+      required this.email,
+      required this.marketcap,
+      required this.permanentaddress});
 
   factory Organisation.fromJson(Map<String, dynamic> json) {
     var farmsList = json['farms'] as List;
@@ -38,17 +38,10 @@ class Farm {
   final int noofinvestors;
   Farm(
       {required this.id,
-<<<<<<< HEAD
       required this.name,
       required this.location,
       required this.energytype,
       required this.noofinvestors});
-=======
-        required this.name,
-        required this.location,
-        required this.energytype,
-        required this.noofinvestors});
->>>>>>> c0c835cd07486694a3d3480abb64e98d7b4542f5
 
   factory Farm.fromJson(Map<String, dynamic> json) {
     return Farm(
@@ -57,8 +50,6 @@ class Farm {
         location: json['Location'],
         energytype: json['energyCategory'],
         noofinvestors: json['totalInvestors']!);
-<<<<<<< HEAD
-=======
   }
 }
 
@@ -145,7 +136,6 @@ class OrganisationFarm {
       farmExpectedReadyDate: json['farmExpectedReadyDate'],
       expectedDateOfReturns: json['expectedDateOfReturns'],
     );
->>>>>>> c0c835cd07486694a3d3480abb64e98d7b4542f5
   }
 }
 
@@ -190,9 +180,6 @@ class TimeSeriesData {
 
   TimeSeriesData(this.time, this.value);
 }
-<<<<<<< HEAD
-=======
-
 
 class InvestmentDetails {
   final int noOfShares;
@@ -239,4 +226,3 @@ class Portfolio {
     );
   }
 }
->>>>>>> c0c835cd07486694a3d3480abb64e98d7b4542f5

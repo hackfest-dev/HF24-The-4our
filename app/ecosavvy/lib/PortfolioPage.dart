@@ -20,9 +20,9 @@ class _PortfolioPageState extends State<PortfolioPage> {
     fetchUserPortfolio();
   }
 
-
   Future<void> fetchUserPortfolio() async {
-    final String userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU'; // Assuming userToken is available
+    final String userToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU'; // Assuming userToken is available
     final String apiUrl = 'http://172.16.17.4:3000/investor/portfolio';
 
     try {
@@ -38,7 +38,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
         if (response.body != null) {
           // Decode the response body
           List<dynamic> data = jsonDecode(response.body);
-          List<Portfolio> portfolioList = data.map((json) => Portfolio.fromJson(json)).toList();
+          List<Portfolio> portfolioList =
+              data.map((json) => Portfolio.fromJson(json)).toList();
 
           setState(() {
             userPortfolio = portfolioList;
@@ -56,7 +57,6 @@ class _PortfolioPageState extends State<PortfolioPage> {
       print('Error fetching user portfolio: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +76,22 @@ class _PortfolioPageState extends State<PortfolioPage> {
       ),
       body: userPortfolio.isEmpty
           ? Center(
-        child: CircularProgressIndicator(), // Show a loading indicator while fetching data
-      )
+              child:
+                  CircularProgressIndicator(), // Show a loading indicator while fetching data
+            )
           : ListView.builder(
-        itemCount: userPortfolio.length,
-        itemBuilder: (context, index) {
-          Portfolio portfolio = userPortfolio[index];
-          return ListTile(
-            title: Text(portfolio.farm.farmName ?? ''),
-            subtitle: Text(portfolio.farm.location ?? ''),
-            onTap: () {
-              // Handle farm item tap
-            },
-          );
-        },
-      ),
+              itemCount: userPortfolio.length,
+              itemBuilder: (context, index) {
+                Portfolio portfolio = userPortfolio[index];
+                return ListTile(
+                  title: Text(portfolio.farm.farmName ?? ''),
+                  subtitle: Text(portfolio.farm.location ?? ''),
+                  onTap: () {
+                    // Handle farm item tap
+                  },
+                );
+              },
+            ),
     );
   }
 }

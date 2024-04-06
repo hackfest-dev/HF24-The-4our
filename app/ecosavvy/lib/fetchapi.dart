@@ -13,5 +13,3 @@ Future<List<Organisation>> fetchOrganisations() async {
     throw Exception('Failed to load organisations');
   }
 }
-
-
