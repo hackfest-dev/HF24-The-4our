@@ -17,13 +17,13 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'adminfarms',
         label: 'Admin Farms',
-        path: '/adminfarms',
+        path: '/admin/adminfarms',
         icon: <TbSolarPanel2/>
     },
     {
         key: 'createfarms',
         label: 'Approve Farms',
-        path: '/approvefarms',
+        path: '/admin/approvefarms',
         icon: <FaCheck/>
     },
 ]
@@ -73,7 +73,7 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS_BOTTOM = [
         {
         key: 'adminsettings',
         label: 'Settings',
-        path: '/adminsettings',
+        path: '/admin/adminsettings',
         icon: <IoMdSettings/>
     },
     {
