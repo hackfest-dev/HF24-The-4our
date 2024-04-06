@@ -144,20 +144,26 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                             minorGridLines: MinorGridLines(width: 0),
                             isVisible: false),
                         series: <ChartSeries>[
-                          ScatterSeries<TimeSeriesData, String>(
+                          // ScatterSeries<TimeSeriesData, String>(
+                          //   dataSource: _chartData,
+                          //   xValueMapper: (TimeSeriesData sales, _) =>
+                          //       sales.time,
+                          //   yValueMapper: (TimeSeriesData sales, _) =>
+                          //       sales.value,
+                          //   markerSettings: MarkerSettings(
+                          //     borderWidth: 0.0,
+                          //     isVisible: true,
+                          //     color: Color.fromARGB(255, 0, 255, 247),
+                          //     width: 9,
+                          //     height: 9,
+                          //     shape: DataMarkerType.circle,
+                          //   ),
+                          //),
+                          SplineAreaSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) =>
-                                sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) =>
-                                sales.value,
-                            markerSettings: MarkerSettings(
-                              borderWidth: 0.0,
-                              isVisible: true,
-                              color: Color.fromARGB(255, 0, 255, 247),
-                              width: 9,
-                              height: 9,
-                              shape: DataMarkerType.circle,
-                            ),
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            color: Color.fromARGB(255, 0, 255, 247).withOpacity(0.4), // Define the color for the shaded area
                           ),
                         ],
                         crosshairBehavior: CrosshairBehavior(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ecosavvy/globe_cord.dart';
 import 'package:flutter/material.dart';
 
 import 'FarmScreen.dart';
@@ -100,14 +99,14 @@ class OrganisationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color(0xFF1E1E1E),
+      color: Color.fromARGB(255, 0, 0, 0),
       elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(99, 75, 75, 75),
+          color: Color.fromARGB(255, 0, 0, 0),
           border: Border.all(
             color: Color.fromARGB(205, 125, 122, 128),
             width: 1.2,
