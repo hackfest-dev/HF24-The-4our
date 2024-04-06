@@ -16,6 +16,7 @@ class _MyPageViewState extends State<MyPageView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController panController = TextEditingController();
+  TextEditingController aadharController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController nomineeNameController = TextEditingController();
@@ -24,6 +25,7 @@ class _MyPageViewState extends State<MyPageView> {
   TextEditingController passwordController = TextEditingController();
 
   List<String> userData = [
+    "",
     "",
     "",
     "",
@@ -77,18 +79,25 @@ class _MyPageViewState extends State<MyPageView> {
                       3,
                     ),
                     buildPage(
+                      "What is your Aadhaar number?",
+                      "Enter here",
+                      Icons.person_add,
+                      aadharController,
+                      4,
+                    ),
+                    buildPage(
                       "What is your permanent address?",
                       "Enter here",
                       Icons.home,
                       addressController,
-                      4,
+                      5,
                     ),
                     buildPage(
                       "What is your date of birth?",
                       "Select here",
                       Icons.calendar_today,
                       dobController,
-                      5,
+                      6,
                       isDatePicker: true,
                     ),
                     buildPage(
@@ -96,21 +105,21 @@ class _MyPageViewState extends State<MyPageView> {
                       "Enter here",
                       Icons.person_add,
                       nomineeNameController,
-                      6,
+                      7,
                     ),
                     buildPage(
                       "What is your nominee's Aadhaar number?",
                       "Enter here",
                       Icons.person_add,
                       nomineeAadhaarController,
-                      7,
+                      8,
                     ),
                     buildPage(
                       "What is your nominee's date of birth?",
                       "Select here",
                       Icons.calendar_today,
                       nomineeDobController,
-                      8,
+                      9,
                       isDatePicker: true,
                     ),
                     buildPage(
@@ -118,7 +127,7 @@ class _MyPageViewState extends State<MyPageView> {
                       "Enter here",
                       Icons.lock,
                       passwordController,
-                      9,
+                      10,
                       isPassword:
                           true, // Set isPassword to true for password field
                     ),
@@ -137,7 +146,7 @@ class _MyPageViewState extends State<MyPageView> {
                 ), // Provide a color here
               ),
               onPressed: () {
-                if (_pageController.page != 8) {
+                if (_pageController.page != 10) {
                   _pageController.nextPage(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -301,6 +310,7 @@ class _MyPageViewState extends State<MyPageView> {
     String email = emailController.text.trim();
     String phone = phoneController.text.trim();
     String pan = panController.text.trim();
+    String aadhar = aadharController.text.trim();
     String address = addressController.text.trim();
     String dob = dobController.text.trim();
     String nomineeName = nomineeNameController.text.trim();
@@ -314,6 +324,7 @@ class _MyPageViewState extends State<MyPageView> {
       "email": email,
       "phoneNumber": phone,
       "panNumber": pan,
+      "aadhar": aadhar,
       "permantAddress": address,
       "dateOfBirth": dob,
       "nomineeName": nomineeName,
