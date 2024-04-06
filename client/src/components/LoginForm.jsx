@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function LoginForm() {
@@ -31,9 +31,8 @@ function LoginForm() {
         // Store token in localStorage
         localStorage.setItem("token", data.token);
 
-        // Redirect or perform any necessary actions after successful login
-        // For example, you can redirect the user to another page
-        // history.push('/dashboard');
+        window.location.href = '/';
+
       } else {
         // Handle login error
         console.error("Login failed:", data.error);

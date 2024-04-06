@@ -1,5 +1,5 @@
 import React from 'react'
-import profile from '/Users/ratnesh/Desktop/Ecosavvy/client/src/images/profile.avif'
+import profile from '../../images/profile.avif'
 
 export default function Navbar() {
   return (

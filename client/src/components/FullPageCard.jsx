@@ -15,6 +15,7 @@ export default function FullPageCard() {
   }
 
   return (
+    <div className='flex'>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-80 pt-0">
       <div>
         <div className="px-4 sm:px-0">
@@ -82,6 +83,16 @@ export default function FullPageCard() {
           </dl>
         </div>
       </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5">
+    <div class="p-8">
+        <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Event Name</div>
+        <p class="block mt-1 text-lg leading-tight font-medium text-black">Event Date</p>
+        <p class="mt-2 text-gray-500">Event Description</p>
+        <p class="mt-2 text-gray-500">Event Details...</p>
+    </div>
+    </div>
     </div>
   );
 }
