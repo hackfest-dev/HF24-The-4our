@@ -66,7 +66,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     });
     _pageController.animateToPage(
       _selectedTabIndex,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.ease,
     );
   }
@@ -75,13 +75,13 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // Apply the theme
     final ThemeData theme = Theme.of(context).copyWith(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0), // Set background color
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0), // Set background color
       primaryColor: Colors.lightGreenAccent, // Set primary color
       scaffoldBackgroundColor:
-          Color.fromARGB(255, 0, 0, 0), // Set scaffold background color
+          const Color.fromARGB(255, 0, 0, 0), // Set scaffold background color
       textTheme: Theme.of(context).textTheme.copyWith(
-            bodyText1: TextStyle(color: Colors.white), // Set text color
-            bodyText2: TextStyle(color: Colors.white), // Set text color
+            bodyText1: const TextStyle(color: Colors.white), // Set text color
+            bodyText2: const TextStyle(color: Colors.white), // Set text color
           ),
     );
 
@@ -92,7 +92,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 80,
             ),
             Padding(
@@ -101,7 +101,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                 children: [
                   Text(
                     widget.farm.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
@@ -109,8 +109,12 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: const Divider(color: Colors.white70, thickness: 1.2,),
             ),
             SizedBox(
                 height: 300, // Adjust height as needed
@@ -142,14 +146,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
                         borderWidth: 0,
-                        plotAreaBorderColor: Color.fromARGB(255, 138, 188, 80),
+                        plotAreaBorderColor: const Color.fromARGB(255, 138, 188, 80),
                         primaryXAxis: CategoryAxis(
-                            majorGridLines: MajorGridLines(width: 0),
-                            minorGridLines: MinorGridLines(width: 0),
+                            majorGridLines: const MajorGridLines(width: 0),
+                            minorGridLines: const MinorGridLines(width: 0),
                             isVisible: true),
                         primaryYAxis: NumericAxis(
-                            majorGridLines: MajorGridLines(width: 0),
-                            minorGridLines: MinorGridLines(width: 0),
+                            majorGridLines: const MajorGridLines(width: 0),
+                            minorGridLines: const MinorGridLines(width: 0),
                             isVisible: false),
                         series: <ChartSeries>[
                           StackedAreaSeries<TimeSeriesData, String>(
@@ -162,9 +166,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
-                                Color.fromARGB(255, 0, 255, 247)
+                                const Color.fromARGB(255, 0, 255, 247)
                                     .withOpacity(0.5),
-                                Color.fromARGB(255, 0, 255, 247)
+                                const Color.fromARGB(255, 0, 255, 247)
                                     .withOpacity(0.3),
                                 Colors.transparent,
                               ],
@@ -176,7 +180,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                 sales.time,
                             yValueMapper: (TimeSeriesData sales, _) =>
                                 sales.value,
-                            color: Color.fromARGB(255, 0, 255,
+                            color: const Color.fromARGB(255, 0, 255,
                                 247), // Define the color for the line
                           ),
                         ],
@@ -194,27 +198,27 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       left: _tooltipPosition.dx - 50,
                       top: _tooltipPosition.dy - 50,
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           _tooltipText,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
                   ],
                 )),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TabBar(
               indicatorColor: Colors.teal,
               controller: _tabController,
               tabs: [
-                Tab(text: 'Details'),
-                Tab(text: 'News'),
-                Tab(text: 'My Shares'),
+                const Tab(text: 'Details'),
+                const Tab(text: 'News'),
+                const Tab(text: 'My Shares'),
               ],
             ),
             Expanded(
@@ -232,18 +236,18 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Analytics',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -252,14 +256,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Avg Returns',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -269,7 +273,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -278,14 +282,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Avg Out',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -297,14 +301,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Today\'s High',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -314,7 +318,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Row(
@@ -325,14 +329,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '52 week low',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -344,14 +348,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '52 week high',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -361,7 +365,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               Row(
@@ -372,14 +376,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Degradation',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -391,14 +395,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Maintenance',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             color: Colors.white54),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 6,
                                       ),
                                       Text(
@@ -424,7 +428,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     ),
                   )),
                   // News Tab
-                  Center(child: Text('News Tab')),
+                  const Center(child: Text('News Tab')),
                   // My Shares Tab
                   widget.userPortfolio.isNotEmpty
                       ? MySharesTab(
@@ -437,12 +441,12 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                             children: [
                               Text(
                                 'Invest in ${widget.farm.name} today',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.teal,
@@ -458,7 +462,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                   // );
                                   _showBuyDialog();
                                 },
-                                child: Text('Buy'),
+                                child: const Text('Buy'),
                               ),
                             ],
                           ),
@@ -634,8 +638,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
             appBar: AppBar(
               elevation: 0,
               automaticallyImplyLeading: false,
-              backgroundColor: Color.fromARGB(255, 0, 0, 0),
-              title: Text(
+              backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+              title: const Text(
                 "Buy Shares",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -647,108 +651,108 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
               centerTitle: true,
             ),
             body: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Energy Type: ${widget.farm.energytype}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                       color: Colors.white, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Number of Investors: ${widget.farm.noofinvestors}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Farm Valuation: ${widget.farm.farmValuation}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Total Investors: ${widget.farm.noofinvestors}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Number of Shares: ${widget.farm.numberOfShares}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white// Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Available Shares: ${widget.farm.availableShares}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Each Share Price: ${widget.farm.eachSharePrice}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Energy Unit: ${widget.farm.energyUnit}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
                     'Energy Per Share: ${widget.farm.energyPerShare.toStringAsFixed(3)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18, // Adjust the font size as needed
                         color: Colors.white // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'Enter the number of shares to buy:',
                     style: TextStyle(
                       fontSize: 18, // Adjust the font size as needed
@@ -757,7 +761,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       // Add more text style properties as needed
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextField(
@@ -769,23 +773,23 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter shares to buy',
-                      hintStyle: TextStyle(color: Colors.white),
+                      hintStyle: const TextStyle(color: Colors.white),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                        borderSide: const BorderSide(width: 2.0, color: Colors.teal),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                        borderSide: const BorderSide(width: 2.0, color: Colors.teal),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
+                        borderSide: const BorderSide(width: 2.0, color: Colors.teal),
                       ),
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -804,10 +808,10 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     minimumSize: MaterialStateProperty.all<Size>(
-                      Size(200.0, 50.0), // Adjust the width here
+                      const Size(200.0, 50.0), // Adjust the width here
                     ),
                   ),
-                  child: Text('Buy',style: TextStyle(
+                  child: const Text('Buy',style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold,// Adjust the font size as needed
                       color: Colors.white// Optionally, make the text bold
                     // Add more text style properties as needed
@@ -881,15 +885,15 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Success'),
-        content: Text('Shares bought successfully!'),
+        title: const Text('Success'),
+        content: const Text('Shares bought successfully!'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -900,14 +904,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Failure'),
-        content: Text('Failed to buy shares.'),
+        title: const Text('Failure'),
+        content: const Text('Failed to buy shares.'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -944,24 +948,24 @@ class _MySharesTabState extends State<MySharesTab> {
         children: [
           Text(
             'Invest in ${widget.farm.name} today',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           // Display details of purchased shares
           if (farmShares.isNotEmpty)
             Column(
               children: [
-                Text(
+                const Text(
                   'Your Shares:',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Display details of each purchased share
                 for (var share in farmShares)
                   Column(
@@ -971,7 +975,7 @@ class _MySharesTabState extends State<MySharesTab> {
                           'Number of Shares: ${share.investmentDetails.noOfShares}'),
                       Text(
                           'Returns: ₹${share.investmentDetails.returns.toStringAsFixed(3)}'),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
               ],
