@@ -208,4 +208,28 @@ const fetchPortfolio = async (req, res, next) => {
   }
 };
 
-module.exports = { invSignUp, investInFarm, invLogin, fetchPortfolio };
+const fetchInvestorDetails = async (req, res) => {
+  try {
+    const { aadharNumber } = req.body;
+
+    // Find the investor by Aadhar number
+    const investor = await Investor.findOne({ aadharNumber });
+
+    if (!investor) {
+      return res.status(404).json({ error: "Investor not found" });
+    }
+
+    res.status(200).json(investor);
+  } catch (error) {
+    console.error("Error in fetching investor details:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  invSignUp,
+  investInFarm,
+  invLogin,
+  fetchPortfolio,
+  fetchInvestorDetails,
+};
