@@ -37,7 +37,7 @@ class Farm {
   final String farmID;
   final String location;
   final String energyCategory;
-  final double farmValuation;
+  final int farmValuation;
   final int totalInvestors;
   final int numberOfShares;
   final int availableShares;

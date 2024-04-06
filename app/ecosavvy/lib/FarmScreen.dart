@@ -84,7 +84,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    widget.farm.name,
+                    widget.farm.farmName,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -138,6 +138,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                           lineWidth: 1,
                           enable: true,
                           activationMode: ActivationMode.singleTap,
+                          lineDashArray: [5,5]
                         ),
                       ),
                     ),
@@ -199,7 +200,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     });
 
     // Construct the API endpoint URL based on selected time option
-    String url = 'http://172.16.17.4:3000/fetch/${widget.farm.id}/returns?duration=$timeOption';
+    String url = 'http://172.16.17.4:3000/fetch/${widget.farm.farmID}/returns?duration=$timeOption';
 
     // Make HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
