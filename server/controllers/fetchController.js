@@ -122,16 +122,14 @@ const fetchFarmReturns = async (req, res, next) => {
 const getFarmWithOrganisation = async (req, res) => {
   try {
     // Retrieve farm data
-    const farmId = req.params.id; // Assuming you're passing farm ID in the request params
-    const farm = await Farm.findById(farmId);
+    const farmId = req.params.farmId;
+    const farm = await Farm.findOne({ farmID: farmId });
 
     if (!farm) {
       return res.status(404).json({ message: "Farm not found" });
     }
 
-    // Retrieve corresponding organisation data
-    const organisationId = farm.orgId; // Assuming orgId is a reference to the Organisation model
-    const organisation = await Organisation.findById(organisationId);
+    const organisation = await Organisation.findOne({ orgID: farm.orgId });
 
     if (!organisation) {
       return res.status(404).json({ message: "Organisation not found" });

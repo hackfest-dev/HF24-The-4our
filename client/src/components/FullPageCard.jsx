@@ -3,14 +3,14 @@ import { useParams } from "react-router-dom";
 import { FARM_DATA } from "../consts/farmdata"; // Assuming FARM_DATA is imported correctly
 
 export default function FullPageCard() {
-  const id = useParams();
+  const { id } = useParams();
   const apiurl = process.env.REACT_APP_API_URL;
 
-  const [farm, setFarmData] = useState([]);
+  const [farm, setFarmData] = useState({});
 
   async function fetchFarmData() {
     try {
-      const response = await fetch(`${apiurl}/fetch/${id}`, {
+      const response = await fetch(`${apiurl}/fetch/farm/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -20,9 +20,16 @@ export default function FullPageCard() {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
-      console.log(data);
+      const obj = { ...data.farm, org: data.organisation };
+      console.log(obj);
+      setFarmData(obj);
     } catch (error) {}
   }
+
+  useState(() => {
+    fetchFarmData();
+    console.log(farm);
+  }, []);
 
   if (!farm) {
     // Farm not found, handle this case as needed (e.g., show a message or redirect)
@@ -136,7 +143,7 @@ export default function FullPageCard() {
         </div>
 
         <div className="flex flex-col w-1/2 pl-20">
-          {farm.news.map((newsItem) => (
+          {farm.news?.map((newsItem) => (
             <div
               key={newsItem.id}
               className="w-1/2 bg-white rounded-xl shadow-md overflow-hidden m-5"
