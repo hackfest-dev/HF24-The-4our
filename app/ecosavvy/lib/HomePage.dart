@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'FarmScreen.dart';
 import 'fetchapi.dart';
+import 'package:http/http.dart' as http;
 import 'models.dart';
 
 class HomePage extends StatefulWidget {
@@ -96,28 +99,27 @@ class OrganisationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color(0xFF1E1E1E), // Darker card background for dark mode
+      color: Color(0xFF1E1E1E),
       elevation: 6,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-            20), // Ensuring the Card's border radius matches the Container's
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(99, 75, 75,
-              75), // This matches the card's background color for a seamless look.
+          color: Color.fromARGB(99, 75, 75, 75),
           border: Border.all(
-              color: Color.fromARGB(205, 125, 122, 128),
-              width: 1.2), // White border for the main card
+            color: Color.fromARGB(205, 125, 122, 128),
+            width: 1.2,
+          ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(205, 157, 143, 172), // Shadow color
-              spreadRadius: 1, // Spread radius
-              blurRadius: 5, // Blur radius
-              offset: Offset(0, 3), // Offset in x and y directions
+              color: Color.fromARGB(205, 157, 143, 172),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 3),
             ),
-          ], // Optional: Match this with your card's border radius
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
@@ -132,19 +134,19 @@ class OrganisationCard extends StatelessWidget {
                   Text(
                     organisation.name,
                     style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 20,
-                        fontWeight: FontWeight
-                            .bold), // Lighter text color for dark mode
+                      color: Colors.white70,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     '# Farms : ${organisation.farms.length}',
                     style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight
-                            .w600), // Consistent text color for dark mode
+                      color: Colors.white70,
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -153,11 +155,11 @@ class OrganisationCard extends StatelessWidget {
                 child: Text(
                   organisation.desc,
                   style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                      fontWeight:
-                          FontWeight.w600), // Lighter text for readability
+                    color: Colors.white70,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w600,
+                  ),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -170,78 +172,82 @@ class OrganisationCard extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final farm = organisation.farms[index];
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        // Fetch user's portfolio data for the selected farm
+
+                        // Navigate to FarmScreen and pass the fetched portfolio data
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  FarmScreen(farm: farm, org: organisation)),
+                            builder: (context) =>
+                                FarmScreen(
+                                  farm: farm,
+                                  org: organisation,
+                                  userPortfolio: [],
+                                ),
+                          ),
                         );
                       },
                       child: Padding(
-                        padding:
-                            const EdgeInsets.all(5.0), // Consistent padding
+                        padding: const EdgeInsets.all(5.0),
                         child: SizedBox(
                           width: 180,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(186, 162, 204,
-                                  98), // This matches the card's background color for a seamless look.
+                              color: Color.fromARGB(186, 162, 204, 98),
                               border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1.2), // White border for the main card
-                              borderRadius: BorderRadius.circular(
-                                  10), // Optional: Match this with your card's border radius
+                                color: Colors.grey,
+                                width: 1.2,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Card(
                               elevation: 3,
                               shadowColor: Colors.lightGreen,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    4), // Ensuring the Card's border radius matches the Container's
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                              color: Color.fromARGB(131, 137, 166,
-                                  94), // Slightly lighter card color for contrast in dark mode
+                              color: Color.fromARGB(131, 137, 166, 94),
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Center(
                                       child: Text(
                                         farm.name!,
                                         style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight
-                                                .bold), // Lighter text for readability
+                                          color: Colors.white70,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
                                           "Location: ${farm.location}",
                                           style: TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight
-                                                  .w600), // Lighter text for readability
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                         Text(
                                           "Energy Form: ${farm.energytype}",
                                           style: TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 12,
-                                              fontStyle: FontStyle.italic,
-                                              fontWeight: FontWeight
-                                                  .w600), // Lighter text for readability
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -262,9 +268,10 @@ class OrganisationCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class CustomSearchDelegate extends SearchDelegate {
+// Function to fetch user's portfolio data for the selected farm
+}
+  class CustomSearchDelegate extends SearchDelegate {
   final List<Organisation> organisations;
 
   CustomSearchDelegate({required this.organisations});

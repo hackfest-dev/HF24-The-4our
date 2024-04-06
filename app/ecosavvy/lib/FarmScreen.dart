@@ -8,8 +8,9 @@ import 'dart:math' as math;
 class FarmScreen extends StatefulWidget {
   final Farm farm;
   final Organisation org;
+  final List<Portfolio> userPortfolio;
 
-  FarmScreen({required this.farm, required this.org});
+  FarmScreen({required this.farm, required this.org, required this.userPortfolio});
 
   @override
   _FarmScreenState createState() => _FarmScreenState();
@@ -30,6 +31,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   int _selectedTabIndex = 0;
   String _tooltipText = '';
   Offset _tooltipPosition = Offset.zero;
+  int sharesToBuy = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -186,7 +189,27 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
-        MySharesTab(farm: widget.farm, org: widget.org),
+                  widget.userPortfolio.isNotEmpty
+                      ? MySharesTab(farm: widget.farm, org: widget.org, userPortfolio: widget.userPortfolio)
+                      : Center(child:Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Invest in ${widget.farm.name} today',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          _showBuyDialog();
+                        },
+                        child: Text('Buy'),
+                      ),
+                    ],
+                  ),),
                 ],
               ),
             ),
@@ -317,47 +340,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       _tooltipPosition = tapPosition;
     });
   }
-}
-
-class MySharesTab extends StatefulWidget {
-  final Farm farm;
-  final Organisation org;
-
-  MySharesTab({required this.farm, required this.org});
-
-  @override
-  _MySharesTabState createState() => _MySharesTabState();
-}
-
-class _MySharesTabState extends State<MySharesTab> {
-  int sharesToBuy = 0;
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Invest in ${widget.farm.name} today',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              _showBuyDialog();
-            },
-            child: Text('Buy'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showBuyDialog() {
     showDialog(
       context: context,
@@ -410,7 +392,6 @@ class _MySharesTabState extends State<MySharesTab> {
       ),
     );
   }
-
   void _buyShares(int sharesToBuy) {
     setState(() {
       isLoading = true;
@@ -496,3 +477,72 @@ class _MySharesTabState extends State<MySharesTab> {
     );
   }
 }
+class MySharesTab extends StatefulWidget {
+  final Farm farm;
+  final Organisation org;
+  final List<Portfolio> userPortfolio;
+
+  MySharesTab({required this.farm, required this.org, required this.userPortfolio});
+
+  @override
+  _MySharesTabState createState() => _MySharesTabState();
+}
+
+class _MySharesTabState extends State<MySharesTab> {
+  int sharesToBuy = 0;
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // Filter user's portfolio data for the current farm
+    List<Portfolio> farmShares = widget.userPortfolio
+        .where((portfolio) => portfolio.farm.farmID == widget.farm.id)
+        .toList();
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Invest in ${widget.farm.name} today',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20),
+          // Display details of purchased shares
+          if (farmShares.isNotEmpty)
+            Column(
+              children: [
+                Text(
+                  'Your Shares:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 10),
+                // Display details of each purchased share
+                for (var share in farmShares)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Number of Shares: ${share.investmentDetails.noOfShares}'),
+                      Text('Returns: ₹${share.investmentDetails.returns.toStringAsFixed(3)}'),
+                      SizedBox(height: 10),
+                    ],
+                  ),
+              ],
+            ),
+          // Button to buy additional shares
+
+        ],
+      ),
+    );
+  }
+
+  // Function to show the buy shares dialog
+
+}
+

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:ecosavvy/FarmScreen.dart';
 import 'package:ecosavvy/Portfolio_farm_details.dart';
+import 'package:ecosavvy/fetchapi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'models.dart'; // Import your models
@@ -13,10 +15,18 @@ class PortfolioPage extends StatefulWidget {
 
 class _PortfolioPageState extends State<PortfolioPage> {
   List<Portfolio> userPortfolio = []; // List to hold user's portfolio
+  late Future<List<Organisation>> futureOrganisations;
+  List<Organisation>? organisations; // Add this line
+  late Farm selectedFarm;
+  late Organisation selectedOrg;
+
 
   @override
   void initState() {
     super.initState();
+    futureOrganisations = fetchOrganisations()
+      ..then((orgs) =>
+      organisations = orgs);
     // Fetch user's portfolio data when the widget is initialized
     fetchUserPortfolio();
   }
@@ -86,15 +96,28 @@ class _PortfolioPageState extends State<PortfolioPage> {
                 children: userPortfolio.map((portfolio) {
                   return GestureDetector(
                     onTap: () {
-                      // Navigate to another page here
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PortfolioFarmDetailsPage(
-                            portfolio: portfolio,
-                          ), // Replace YourNextPage with the desired page
-                        ),
-                      );
+                      // Find the farm details based on the farmID
+
+
+                      for (var org in organisations!) {
+                        for (var farm in org.farms) {
+                          if (farm.id == portfolio.farm.farmID) {
+                            selectedFarm = farm;
+                            selectedOrg = org;
+                            break;
+                          }
+                        }
+
+                      }
+
+                      // Navigate to farm screen and pass farm details
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FarmScreen(farm: selectedFarm, org: selectedOrg, userPortfolio: userPortfolio,),
+                          ),
+                        );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
