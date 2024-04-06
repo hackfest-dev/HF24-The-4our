@@ -34,14 +34,15 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   Offset _tooltipPosition = Offset.zero;
   int sharesToBuy = 0;
   bool isLoading = false;
-  late double avgEnergyOutput;
-  late double avgReturns;
-  late double highestOutput;
-  late double highestLastYear;
-  late double lowestLastYear;
-  late double farmDegradePercent;
-  late double farmMaintenancePercent;
-  late double currentOutput;
+  double? avgEnergyOutput;
+  double? avgReturns;
+  double? highestOutput;
+  double? highestLastYear;
+  double? lowestLastYear;
+  double? farmDegradePercent;
+  double? farmMaintenancePercent;
+  double? currentOutput;
+
 
   @override
   void initState() {
@@ -146,26 +147,32 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false),
+                            isVisible: true),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
                             isVisible: false),
                         series: <ChartSeries>[
-                          ScatterSeries<TimeSeriesData, String>(
+                        StackedAreaSeries<TimeSeriesData, String>(
+                          dataSource: _chartData,
+                          xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                        yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color.fromARGB(255, 0, 255, 247).withOpacity(0.5),
+                              Color.fromARGB(255, 0, 255, 247).withOpacity(0.3),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+
+                          LineSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) =>
-                                sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) =>
-                                sales.value,
-                            markerSettings: MarkerSettings(
-                              borderWidth: 0.0,
-                              isVisible: true,
-                              color: Color.fromARGB(255, 0, 255, 247),
-                              width: 9,
-                              height: 9,
-                              shape: DataMarkerType.circle,
-                            ),
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            color: Color.fromARGB(255, 0, 255, 247), // Define the color for the line
                           ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
@@ -197,7 +204,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                 )),
             SizedBox(height: 20),
             TabBar(
-              indicatorColor: Colors.lightGreen,
+              indicatorColor: Colors.teal,
               controller: _tabController,
               tabs: [
                 Tab(text: 'Details'),
@@ -217,44 +224,22 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       child: // Details Tab
                           Container(
                     padding: EdgeInsets.all(16),
-                    child: Column(
+                    child:// Inside your Details Tab child
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Average Energy Output: ${avgEnergyOutput}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Average Returns: ${avgReturns}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Highest Output: ${highestOutput}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Highest Output Last Year: ${highestLastYear}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Lowest Output Last Year: ${lowestLastYear}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Farm Degradation Percent: ${farmDegradePercent}%',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Farm Maintenance Percent: ${farmMaintenancePercent}%',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          'Current Output: ${currentOutput}',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text('Average Energy Output: ${avgEnergyOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        Text('Average Returns: ${avgReturns?.toStringAsFixed(2) ?? 'Loading...'}'),
+                        Text('Highest Output: ${highestOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        Text('Highest Output Last Year: ${highestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        Text('Lowest Output Last Year: ${lowestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        Text('Farm Degradation Percent: ${farmDegradePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
+                        Text('Farm Maintenance Percent: ${farmMaintenancePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
+                        Text('Current Output: ${currentOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
                       ],
                     ),
-                  )),
+
+                          )),
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
@@ -321,16 +306,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
 
       List<TimeSeriesData> data = [];
 
-      avgEnergyOutput = analyticsData['avgEnergyOutput'];
-      avgReturns = analyticsData['avgReturns'];
-      highestOutput = analyticsData['highestOutput'];
-      highestLastYear = analyticsData['highestLastYear'];
-      lowestLastYear = analyticsData['lowestLastYear'];
-      farmDegradePercent = double.parse(analyticsData['farmDegradePercent']);
-      farmMaintenancePercent =
-          double.parse(analyticsData['farmMaintenancePercent']);
-      currentOutput = analyticsData['currentOutput'];
-
       // Convert JSON data to TimeSeriesData objects
       for (var item in rawData) {
         print(item);
@@ -350,8 +325,18 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         return processedData;
       }
 
-      // Update state with fetched data
+
+// Now set your state variables
       setState(() {
+        avgEnergyOutput = (analyticsData['avgEnergyOutput'] is int) ? (analyticsData['avgEnergyOutput'] as int).toDouble() : analyticsData['avgEnergyOutput'];
+        avgReturns = (analyticsData['avgReturns'] is int) ? (analyticsData['avgReturns'] as int).toDouble() : analyticsData['avgReturns'];
+        highestOutput = (analyticsData['highestOutput'] is int) ? (analyticsData['highestOutput'] as int).toDouble() : analyticsData['highestOutput'];
+        highestLastYear = (analyticsData['highestLastYear'] is int) ? (analyticsData['highestLastYear'] as int).toDouble() : analyticsData['highestLastYear'];
+        lowestLastYear = (analyticsData['lowestLastYear'] is int) ? (analyticsData['lowestLastYear'] as int).toDouble() : analyticsData['lowestLastYear'];
+        farmDegradePercent = (analyticsData['farmDegradePercent'] is int) ? (analyticsData['farmDegradePercent'] as int).toDouble() : double.tryParse(analyticsData['farmDegradePercent'].toString());
+        farmMaintenancePercent = (analyticsData['farmMaintenancePercent'] is int) ? (analyticsData['farmMaintenancePercent'] as int).toDouble() : double.tryParse(analyticsData['farmMaintenancePercent'].toString());
+        currentOutput = (analyticsData['currentOutput'] is int) ? (analyticsData['currentOutput'] as int).toDouble() : analyticsData['currentOutput'];
+
         _chartData = processData(data);
         _updateMaxYValue(_chartData); // Update maximum Y value
         _updateXAxisOptions(
