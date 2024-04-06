@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import FarmCard from '../components/FarmCard'
+import {Link} from 'react-router-dom'
 
 const AdminFarms = () => {
   const [farmsData, setFarmsData] = useState([]);
@@ -20,9 +22,28 @@ const AdminFarms = () => {
     };
 
     fetchFarms();
+    console.log(farmsData)
   }, []);
 
-  return <div></div>;
+  return <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-20 overflow-scroll ml-60">
+      {Array.isArray(farmsData) && farmsData.length > 0 ? (
+        farmsData.map((item) => (
+          <Link to={`/farms/${item.farmID}`} key={item.farmID}>
+            <FarmCard
+              key={item.farmID}
+              imageUrl={item.imgurl}
+              title={item.farmName}
+              category={item.energyCategory}
+              location={item.Location}
+            />
+          </Link>
+        ))
+      ) : (
+        <h1>LOADING...</h1>
+      )}
+    </div>
+  </div>;
 };
 
 export default AdminFarms;
