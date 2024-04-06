@@ -43,7 +43,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   double? farmMaintenancePercent;
   double? currentOutput;
 
-
   @override
   void initState() {
     super.initState();
@@ -153,26 +152,32 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                             minorGridLines: MinorGridLines(width: 0),
                             isVisible: false),
                         series: <ChartSeries>[
-                        StackedAreaSeries<TimeSeriesData, String>(
-                          dataSource: _chartData,
-                          xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                        yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color.fromARGB(255, 0, 255, 247).withOpacity(0.5),
-                              Color.fromARGB(255, 0, 255, 247).withOpacity(0.3),
-                              Colors.transparent,
-                            ],
+                          StackedAreaSeries<TimeSeriesData, String>(
+                            dataSource: _chartData,
+                            xValueMapper: (TimeSeriesData sales, _) =>
+                                sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) =>
+                                sales.value,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromARGB(255, 0, 255, 247)
+                                    .withOpacity(0.5),
+                                Color.fromARGB(255, 0, 255, 247)
+                                    .withOpacity(0.3),
+                                Colors.transparent,
+                              ],
+                            ),
                           ),
-                        ),
-
                           LineSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                            color: Color.fromARGB(255, 0, 255, 247), // Define the color for the line
+                            xValueMapper: (TimeSeriesData sales, _) =>
+                                sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) =>
+                                sales.value,
+                            color: Color.fromARGB(255, 0, 255,
+                                247), // Define the color for the line
                           ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
@@ -222,24 +227,202 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   // Details Tab
                   Center(
                       child: // Details Tab
-                          Container(
-                    padding: EdgeInsets.all(16),
-                    child:// Inside your Details Tab child
-                    Column(
+                          SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Average Energy Output: ${avgEnergyOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
-                        Text('Average Returns: ${avgReturns?.toStringAsFixed(2) ?? 'Loading...'}'),
-                        Text('Highest Output: ${highestOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
-                        Text('Highest Output Last Year: ${highestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
-                        Text('Lowest Output Last Year: ${lowestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
-                        Text('Farm Degradation Percent: ${farmDegradePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
-                        Text('Farm Maintenance Percent: ${farmMaintenancePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
-                        Text('Current Output: ${currentOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Analytics',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Avg Returns',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '₹ ${avgReturns?.toStringAsFixed(2) ?? 'Loading...'}',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Avg Out',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${avgEnergyOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh',
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Today\'s High',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${highestOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '52 week low',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${lowestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh',
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '52 week high',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${highestLastYear?.toStringAsFixed(3) ?? 'Loading...'} kWh',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Degradation',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${farmDegradePercent?.toStringAsFixed(2) ?? 'Loading...'} %',
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Maintenance',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                            color: Colors.white54),
+                                      ),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        '${farmMaintenancePercent?.toStringAsFixed(3) ?? 'Loading...'} %',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+
+                        // Text('Average Energy Output: ${avgEnergyOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        // Text('Average Returns: ${avgReturns?.toStringAsFixed(2) ?? 'Loading...'}'),
+                        // Text('Highest Output: ${highestOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        // Text('Highest Output Last Year: ${highestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        // Text('Lowest Output Last Year: ${lowestLastYear?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
+                        // Text('Farm Degradation Percent: ${farmDegradePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
+                        // Text('Farm Maintenance Percent: ${farmMaintenancePercent?.toStringAsFixed(2) ?? 'Loading...'}%'),
+                        // // Text('Current Output: ${currentOutput?.toStringAsFixed(2) ?? 'Loading...'} kWh'),
                       ],
                     ),
-
-                          )),
+                  )),
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
@@ -325,17 +508,34 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         return processedData;
       }
 
-
 // Now set your state variables
       setState(() {
-        avgEnergyOutput = (analyticsData['avgEnergyOutput'] is int) ? (analyticsData['avgEnergyOutput'] as int).toDouble() : analyticsData['avgEnergyOutput'];
-        avgReturns = (analyticsData['avgReturns'] is int) ? (analyticsData['avgReturns'] as int).toDouble() : analyticsData['avgReturns'];
-        highestOutput = (analyticsData['highestOutput'] is int) ? (analyticsData['highestOutput'] as int).toDouble() : analyticsData['highestOutput'];
-        highestLastYear = (analyticsData['highestLastYear'] is int) ? (analyticsData['highestLastYear'] as int).toDouble() : analyticsData['highestLastYear'];
-        lowestLastYear = (analyticsData['lowestLastYear'] is int) ? (analyticsData['lowestLastYear'] as int).toDouble() : analyticsData['lowestLastYear'];
-        farmDegradePercent = (analyticsData['farmDegradePercent'] is int) ? (analyticsData['farmDegradePercent'] as int).toDouble() : double.tryParse(analyticsData['farmDegradePercent'].toString());
-        farmMaintenancePercent = (analyticsData['farmMaintenancePercent'] is int) ? (analyticsData['farmMaintenancePercent'] as int).toDouble() : double.tryParse(analyticsData['farmMaintenancePercent'].toString());
-        currentOutput = (analyticsData['currentOutput'] is int) ? (analyticsData['currentOutput'] as int).toDouble() : analyticsData['currentOutput'];
+        avgEnergyOutput = (analyticsData['avgEnergyOutput'] is int)
+            ? (analyticsData['avgEnergyOutput'] as int).toDouble()
+            : analyticsData['avgEnergyOutput'];
+        avgReturns = (analyticsData['avgReturns'] is int)
+            ? (analyticsData['avgReturns'] as int).toDouble()
+            : analyticsData['avgReturns'];
+        highestOutput = (analyticsData['highestOutput'] is int)
+            ? (analyticsData['highestOutput'] as int).toDouble()
+            : analyticsData['highestOutput'];
+        highestLastYear = (analyticsData['highestLastYear'] is int)
+            ? (analyticsData['highestLastYear'] as int).toDouble()
+            : analyticsData['highestLastYear'];
+        lowestLastYear = (analyticsData['lowestLastYear'] is int)
+            ? (analyticsData['lowestLastYear'] as int).toDouble()
+            : analyticsData['lowestLastYear'];
+        farmDegradePercent = (analyticsData['farmDegradePercent'] is int)
+            ? (analyticsData['farmDegradePercent'] as int).toDouble()
+            : double.tryParse(analyticsData['farmDegradePercent'].toString());
+        farmMaintenancePercent =
+            (analyticsData['farmMaintenancePercent'] is int)
+                ? (analyticsData['farmMaintenancePercent'] as int).toDouble()
+                : double.tryParse(
+                    analyticsData['farmMaintenancePercent'].toString());
+        currentOutput = (analyticsData['currentOutput'] is int)
+            ? (analyticsData['currentOutput'] as int).toDouble()
+            : analyticsData['currentOutput'];
 
         _chartData = processData(data);
         _updateMaxYValue(_chartData); // Update maximum Y value
