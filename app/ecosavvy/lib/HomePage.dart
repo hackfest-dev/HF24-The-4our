@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.all(16),
                       color: Colors.teal,
                       child: Text(
-                        'You can start investing once your KYC is done. Usually takes 24-48 Hrs ',
+                        'You can start investing once your KYC is done. Usually takes 48 Hrs ',
                         style: TextStyle(
                           color: Colors.white,
                         ),
