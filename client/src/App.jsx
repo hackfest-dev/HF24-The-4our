@@ -19,6 +19,7 @@ import Profile from "./components/Profile";
 import AdminSettings from "./components/AdminSettings";
 import KYC from "./components/KYC";
 import AdminFullPageCard from "./components/AdminFullPageCard";
+import Home from "./components/Home"
 
 export default function App() {
   return (
@@ -26,7 +27,8 @@ export default function App() {
       <Routes>
         <Route path="login" element={<LoginForm />} />
         <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<Home />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="farms" element={<Farms />} />
           <Route path="farms/:id" element={<FullPageCard />} />
           <Route path="createfarms" element={<CreateFarms />} />

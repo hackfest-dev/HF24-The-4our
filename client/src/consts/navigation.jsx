@@ -6,6 +6,8 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
+import { FaHome } from "react-icons/fa";
+
 
 
 
@@ -38,9 +40,15 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
+        key: 'home',
+        label: 'Home',
+        path: '/',
+        icon: <FaHome/>
+    },
+    {
         key: 'dashboard',
         label: 'Dashboard',
-        path: '/',
+        path: '/dashboard',
         icon: <HiOutlineViewGrid/>
     },
     {
