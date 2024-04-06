@@ -46,7 +46,7 @@ const orgSchema = new mongoose.Schema({
   },
   docsLinks: {
     type: Array,
-    required: true,
+    required: false,
   },
 });
 

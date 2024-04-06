@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginForm() {
+  const navigate = useNavigate();
+  const apiurl = process.env.REACT_APP_API_URL;
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,7 +19,7 @@ function LoginForm() {
 
     try {
       // Make API call to authenticate user
-      const response = await fetch("YOUR_LOGIN_API_ENDPOINT", {
+      const response = await fetch(`${apiurl}/organisation/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,8 +34,7 @@ function LoginForm() {
         // Store token in localStorage
         localStorage.setItem("token", data.token);
 
-        window.location.href = '/';
-
+        navigate("/");
       } else {
         // Handle login error
         console.error("Login failed:", data.error);
@@ -58,12 +60,7 @@ function LoginForm() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form
-          className="space-y-6"
-          action="#"
-          method="POST"
-          onSubmit={handleSubmit}
-        >
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="email"
