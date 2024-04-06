@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { FARM_DATA } from "../consts/farmdata"; // Assuming FARM_DATA is imported correctly
+import React, { useState } from "react"
+import { useParams } from "react-router-dom"
+import { FARM_DATA } from "../consts/farmdata" // Assuming FARM_DATA is imported correctly
 
 export default function FullPageCard() {
-  const { id } = useParams();
-  const apiurl = process.env.REACT_APP_API_URL;
+  const { id } = useParams()
+  const apiurl = process.env.REACT_APP_API_URL
 
-  const [farm, setFarmData] = useState({});
+  const [farm, setFarmData] = useState({})
 
   async function fetchFarmData() {
     try {
@@ -15,25 +15,64 @@ export default function FullPageCard() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      });
+      })
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch data")
       }
-      const data = await response.json();
-      const obj = { ...data.farm, org: data.organisation };
-      console.log(obj);
-      setFarmData(obj);
+      const data = await response.json()
+      const obj = { ...data.farm, org: data.organisation }
+      console.log(obj)
+      setFarmData(obj)
     } catch (error) {}
   }
 
+  const [news, setNews] = useState("")
+
   useState(() => {
-    fetchFarmData();
-    console.log(farm);
-  }, []);
+    fetchFarmData()
+    console.log(farm)
+  }, [])
 
   if (!farm) {
     // Farm not found, handle this case as needed (e.g., show a message or redirect)
-    return <div>Farm not found</div>;
+    return <div>Farm not found</div>
+  }
+
+  const handleChange = (e) => {
+    setNews(e.target.value)
+  }
+
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      // Make API call to authenticate user
+      const response = await fetch(`${apiurl}/farm/addnews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          farmID: id,
+          news: news,
+        }),
+      })
+
+      const data = await response.json()
+
+      // Check if login was successful
+      if (response.ok) {
+        setNews('')
+      } else {
+        // Handle login error
+        console.error("No news! :(")
+        // Display error message to the user
+      }
+    } catch (error) {
+      console.error("Error during login:", error)
+      // Display error message to the user
+    }
   }
 
   return (
@@ -157,6 +196,38 @@ export default function FullPageCard() {
           ))}
         </div>
       </div>
+
+      <div className="w-2/3 ml-72">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded px-8 pb-8 mb-4"
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="textInput"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Enter News:
+            </label>
+            <input
+              type="text"
+              id="textInput"
+              value={news}
+              onChange={handleChange}
+              placeholder="Type something..."
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div className="flex items-center justify-center">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  );
+  )
 }
