@@ -16,11 +16,13 @@ class FarmScreen extends StatefulWidget {
 }
 
 class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
-  late List<TimeSeriesData> _chartData = []; // Initialize _chartData to an empty list
+  late List<TimeSeriesData> _chartData =
+      []; // Initialize _chartData to an empty list
   final List<String> _timeOptions = ['1D', '1M', '6M', '1Y', 'All'];
   String _selectedTimeOption = '1D';
   double _maxYValue = 1.0; // Initialize maximum Y value
-  double _primaryXAxisVisibleMaximum = 24.0; // Initial visible maximum for 1D option
+  double _primaryXAxisVisibleMaximum =
+      24.0; // Initial visible maximum for 1D option
   double _primaryXAxisInterval = 3.0; // Initial interval for 1D option
   bool _isLoading = false; // Flag to track loading state
   late TabController _tabController;
@@ -28,7 +30,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   int _selectedTabIndex = 0;
   String _tooltipText = '';
   Offset _tooltipPosition = Offset.zero;
-
 
   @override
   void initState() {
@@ -62,13 +63,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // Apply the theme
     final ThemeData theme = Theme.of(context).copyWith(
-      backgroundColor: Color(0xff252525), // Set background color
+      backgroundColor: Color.fromARGB(255, 0, 0, 0), // Set background color
       primaryColor: Colors.lightGreenAccent, // Set primary color
-      scaffoldBackgroundColor: Color(0xff252525), // Set scaffold background color
+      scaffoldBackgroundColor:
+          Color.fromARGB(255, 0, 0, 0), // Set scaffold background color
       textTheme: Theme.of(context).textTheme.copyWith(
-        bodyText1: TextStyle(color: Colors.white), // Set text color
-        bodyText2: TextStyle(color: Colors.white), // Set text color
-      ),
+            bodyText1: TextStyle(color: Colors.white), // Set text color
+            bodyText2: TextStyle(color: Colors.white), // Set text color
+          ),
     );
 
     return Theme(
@@ -78,19 +80,20 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(height: 80,),
+            SizedBox(
+              height: 80,
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
                   Text(
-                    widget.farm.farmName,
+                    widget.farm.name,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -103,43 +106,45 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   children: [
                     GestureDetector(
                       onTapDown: (TapDownDetails details) {
-                        final dynamic xPos = (details.localPosition.dx /
-                            context.size!.width) *
-                            _primaryXAxisVisibleMaximum;
-                        final int nearestIndex = (xPos.round()).clamp(
-                            0, _chartData.length - 1);
-                        final TimeSeriesData dataPoint = _chartData[nearestIndex];
-                        showTooltip(dataPoint.time, dataPoint.value, details.localPosition);
+                        final dynamic xPos =
+                            (details.localPosition.dx / context.size!.width) *
+                                _primaryXAxisVisibleMaximum;
+                        final int nearestIndex =
+                            (xPos.round()).clamp(0, _chartData.length - 1);
+                        final TimeSeriesData dataPoint =
+                            _chartData[nearestIndex];
+                        showTooltip(dataPoint.time, dataPoint.value,
+                            details.localPosition);
                       },
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
                         borderWidth: 0,
-                        plotAreaBorderColor: Colors.lightGreen,
+                        plotAreaBorderColor: Color.fromARGB(255, 138, 188, 80),
                         primaryXAxis: CategoryAxis(
-                          majorGridLines: MajorGridLines(width: 0),
-                          minorGridLines: MinorGridLines(width: 0),
-                          isVisible: false
-                        ),
+                            majorGridLines: MajorGridLines(width: 0),
+                            minorGridLines: MinorGridLines(width: 0),
+                            isVisible: false),
                         primaryYAxis: NumericAxis(
-                          majorGridLines: MajorGridLines(width: 0),
-                          minorGridLines: MinorGridLines(width: 0),
-                          isVisible: false
-                        ),
+                            majorGridLines: MajorGridLines(width: 0),
+                            minorGridLines: MinorGridLines(width: 0),
+                            isVisible: false),
                         series: <ChartSeries>[
                           LineSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            xValueMapper: (TimeSeriesData sales, _) =>
+                                sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) =>
+                                sales.value,
+                            color: Color.fromARGB(186, 162, 204, 98),
                           )
                         ],
                         crosshairBehavior: CrosshairBehavior(
-                          lineType: CrosshairLineType.both,
-                          lineColor: Colors.grey,
-                          lineWidth: 1,
-                          enable: true,
-                          activationMode: ActivationMode.singleTap,
-                          lineDashArray: [5,5]
-                        ),
+                            lineType: CrosshairLineType.both,
+                            lineColor: Colors.grey,
+                            lineWidth: 1,
+                            enable: true,
+                            activationMode: ActivationMode.singleTap,
+                            lineDashArray: [5, 5]),
                       ),
                     ),
                     Positioned(
@@ -158,9 +163,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                       ),
                     ),
                   ],
-                )
-
-            ),
+                )),
             SizedBox(height: 20),
             TabBar(
               indicatorColor: Colors.lightGreen,
@@ -200,7 +203,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     });
 
     // Construct the API endpoint URL based on selected time option
-    String url = 'http://172.16.17.4:3000/fetch/${widget.farm.farmID}/returns?duration=$timeOption';
+    String url =
+        'http://172.16.17.4:3000/fetch/${widget.farm.id}/returns?duration=$timeOption';
 
     // Make HTTP GET request
     http.Response response = await http.get(Uri.parse(url));
@@ -215,7 +219,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       for (var item in rawData) {
         data.add(TimeSeriesData(
           item['timestamp'], // Use 'timestamp' field as time
-          double.parse(item['energyGeneratedKilowattHours'].toString()), // Parse energyGeneratedKilowattHours to double
+          double.parse(item['energyGeneratedKilowattHours']
+              .toString()), // Parse energyGeneratedKilowattHours to double
         ));
       }
       List<TimeSeriesData> processData(List<TimeSeriesData> rawData) {
@@ -227,11 +232,13 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
 
         return processedData;
       }
+
       // Update state with fetched data
       setState(() {
         _chartData = processData(data);
         _updateMaxYValue(_chartData); // Update maximum Y value
-        _updateXAxisOptions(_selectedTimeOption); // Update X-axis options based on selected time option
+        _updateXAxisOptions(
+            _selectedTimeOption); // Update X-axis options based on selected time option
         _updateVisibleRange(); // Update visible range
         _isLoading = false; // Set loading state to false
       });
@@ -247,7 +254,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
 
   // Function to update maximum Y value based on chart data
   void _updateMaxYValue(List<TimeSeriesData> data) {
-    double max = data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
+    double max =
+        data.isNotEmpty ? data.map((e) => e.value).reduce(math.max) : 1.0;
     setState(() {
       _maxYValue = max;
     });
@@ -259,7 +267,8 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       switch (selectedTimeOption) {
         case '1D':
           _primaryXAxisVisibleMaximum = 24.0;
-          _primaryXAxisInterval = 3.0; // Show hourly labels with an interval of 3 hours
+          _primaryXAxisInterval =
+              3.0; // Show hourly labels with an interval of 3 hours
           break;
         case '1M':
           _primaryXAxisVisibleMaximum = 24 * 30.0;
@@ -267,15 +276,23 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
           break;
         case '6M':
           _primaryXAxisVisibleMaximum = 24 * 30 * 6.0;
-          _primaryXAxisInterval = 30 * 24 * 3.0; // Show monthly labels with an interval of 3 months
+          _primaryXAxisInterval =
+              30 * 24 * 3.0; // Show monthly labels with an interval of 3 months
           break;
         case '1Y':
           _primaryXAxisVisibleMaximum = 24 * 365.0;
-          _primaryXAxisInterval = 30 * 24 * 3 * 4.0; // Show yearly labels with an interval of 4 years
+          _primaryXAxisInterval = 30 *
+              24 *
+              3 *
+              4.0; // Show yearly labels with an interval of 4 years
           break;
         case 'All':
           _primaryXAxisVisibleMaximum = _chartData.length.toDouble();
-          _primaryXAxisInterval = 30 * 24 * 3 * 4 * 10.0; // Show labels for every 10 years for all data
+          _primaryXAxisInterval = 30 *
+              24 *
+              3 *
+              4 *
+              10.0; // Show labels for every 10 years for all data
           break;
         default:
           _primaryXAxisInterval = 1.0;
@@ -292,11 +309,12 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
       }
     });
   }
+
   void showTooltip(String time, double value, Offset tapPosition) {
     setState(() {
-      _tooltipText = 'Time: $time:00 hrs\nEnergy: ${value.toStringAsFixed(2)} kwh';
+      _tooltipText =
+          'Time: $time:00 hrs\nEnergy: ${value.toStringAsFixed(2)} kwh';
       _tooltipPosition = tapPosition;
     });
   }
-
 }

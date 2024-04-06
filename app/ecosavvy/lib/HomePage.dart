@@ -105,13 +105,20 @@ class OrganisationCard extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(214, 130, 163,
-              102), // This matches the card's background color for a seamless look.
+          color: Color.fromARGB(205, 87, 24,
+              151), // This matches the card's background color for a seamless look.
           border: Border.all(
-              color: const Color.fromARGB(255, 50, 71, 25),
+              color: Color.fromARGB(205, 87, 24, 151),
               width: 1.2), // White border for the main card
-          borderRadius: BorderRadius.circular(
-              20), // Optional: Match this with your card's border radius
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(205, 127, 73, 180), // Shadow color
+              spreadRadius: 1, // Spread radius
+              blurRadius: 5, // Blur radius
+              offset: Offset(0, 3), // Offset in x and y directions
+            ),
+          ], // Optional: Match this with your card's border radius
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
@@ -179,8 +186,8 @@ class OrganisationCard extends StatelessWidget {
                           width: 180,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(
-                                  0xFF1E1E1E), // This matches the card's background color for a seamless look.
+                              color: Color.fromARGB(186, 162, 204,
+                                  98), // This matches the card's background color for a seamless look.
                               border: Border.all(
                                   color: Colors.grey,
                                   width: 1.2), // White border for the main card
@@ -194,8 +201,8 @@ class OrganisationCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(
                                     4), // Ensuring the Card's border radius matches the Container's
                               ),
-                              color: Color(
-                                  0xFF2A2A2A), // Slightly lighter card color for contrast in dark mode
+                              color: Color.fromARGB(131, 137, 166,
+                                  94), // Slightly lighter card color for contrast in dark mode
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
@@ -206,7 +213,7 @@ class OrganisationCard extends StatelessWidget {
                                   children: [
                                     Center(
                                       child: Text(
-                                        farm.farmName,
+                                        farm.name,
                                         style: TextStyle(
                                             color: Colors.white70,
                                             fontSize: 16,
@@ -229,7 +236,7 @@ class OrganisationCard extends StatelessWidget {
                                                   .w600), // Lighter text for readability
                                         ),
                                         Text(
-                                          "Energy Form: ${farm.energyCategory}",
+                                          "Energy Form: ${farm.energytype}",
                                           style: TextStyle(
                                               color: Colors.white70,
                                               fontSize: 12,
@@ -291,7 +298,7 @@ class CustomSearchDelegate extends SearchDelegate {
         .where((org) =>
             org.name.toLowerCase().contains(query.toLowerCase()) ||
             org.farms.any((farm) =>
-                farm.farmName.toLowerCase().contains(query.toLowerCase())))
+                farm.name.toLowerCase().contains(query.toLowerCase())))
         .toList();
 
     return ListView(
