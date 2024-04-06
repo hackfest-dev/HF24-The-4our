@@ -71,8 +71,19 @@ class _EmailPasswordPageState extends State<EmailPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Email and Password'),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text(
+          "Sign In",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
       ),
       backgroundColor: Colors.black,
       body: Padding(
@@ -110,8 +121,17 @@ class _EmailPasswordPageState extends State<EmailPasswordPage> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: _authenticateUser,
-              style: ElevatedButton.styleFrom(
-                primary: Colors.purple,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+                // Change color as needed
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0), // Adjust the border radius here
+                  ),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(200.0, 50.0), // Adjust the width here
+                ),
               ),
               child: Text('Submit'),
             ),

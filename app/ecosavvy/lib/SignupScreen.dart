@@ -141,9 +141,16 @@ class _MyPageViewState extends State<MyPageView> {
             right: 20.0,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  const Color.fromARGB(255, 135, 33, 243),
-                ), // Provide a color here
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+                // Change color as needed
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0), // Adjust the border radius here
+                  ),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(50.0, 50.0), // Adjust the width here
+                ),
               ),
               onPressed: () {
                 if (_pageController.page != 10) {
@@ -179,8 +186,16 @@ class _MyPageViewState extends State<MyPageView> {
             left: 20.0,
             child: TextButton(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color(0xFF5803AD)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
+                // Change color as needed
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0), // Adjust the border radius here
+                  ),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(50.0, 50.0), // Adjust the width here
+                ),
               ),
               onPressed: () {
                 _pageController.previousPage(
@@ -224,14 +239,14 @@ class _MyPageViewState extends State<MyPageView> {
             Icon(
               iconData,
               size: 100,
-              color: Theme.of(context).primaryColor,
+              color: Colors.teal,
             ),
             SizedBox(height: 20),
             Text(
               question,
               style: TextStyle(
                   fontSize: 25,
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
             SizedBox(
@@ -239,6 +254,10 @@ class _MyPageViewState extends State<MyPageView> {
             ),
             if (isDatePicker)
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.teal,),
+                ),
                 onPressed: () => _selectDate(context, controller),
                 child: Text('Select Date'),
               )
@@ -248,22 +267,21 @@ class _MyPageViewState extends State<MyPageView> {
                 obscureText: isPassword, // Set obscureText based on isPassword
                 style:
                     TextStyle(color: Colors.white), // Set text color to white
-                cursorColor: Color(0xFF5803AD), // Set cursor color
+                cursorColor: Colors.teal, // Set cursor color
                 readOnly: false, // Set the text field as not read-only
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color.fromARGB(209, 170, 131, 209),
+                  filled: false,
                   hintText: hintText,
                   hintStyle: TextStyle(
                       color: Colors.white), // Set hint text color to white
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(width: 2.0, color: Color(0xFF5803AD)),
+                        BorderSide(width: 2.0, color: Colors.teal,),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                         width: 2.0,
-                        color: Colors.white), // Set border color to white
+                        color: Colors.teal,), // Set border color to white
                   ),
                 ),
               ),
@@ -292,6 +310,15 @@ class _MyPageViewState extends State<MyPageView> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal), // Change the color to teal
+            dialogBackgroundColor: Colors.white, // Background color of the dialog
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -303,6 +330,7 @@ class _MyPageViewState extends State<MyPageView> {
       });
     }
   }
+
 
   void saveData(BuildContext context) async {
     // Your existing code to retrieve user data
@@ -377,8 +405,9 @@ class _MyPageViewState extends State<MyPageView> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF5803AD),
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.teal,),
                 ),
                 child: Text(
                   'OK',

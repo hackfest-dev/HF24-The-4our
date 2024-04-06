@@ -72,8 +72,16 @@ class _AccountPageState extends State<AccountPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
-              child: Card(
-                color: Color(0xff444444),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color.fromARGB(205, 125, 122, 128),
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+
+                ),
+                width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

@@ -109,7 +109,7 @@ class OrganisationCard extends StatelessWidget {
           color: Color.fromARGB(255, 0, 0, 0),
           border: Border.all(
             color: Color.fromARGB(205, 125, 122, 128),
-            width: 1.2,
+            width: 3,
           ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
@@ -193,20 +193,20 @@ class OrganisationCard extends StatelessWidget {
                           width: 180,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(186, 162, 204, 98),
+                              color: Colors.black12,
                               border: Border.all(
-                                color: Colors.grey,
-                                width: 1.2,
+                                color: Colors.teal,
+                                width: 2,
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Card(
-                              elevation: 3,
-                              shadowColor: Colors.lightGreen,
+                              elevation: 0,
+                              shadowColor: Colors.teal,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              color: Color.fromARGB(131, 137, 166, 94),
+                              color: Colors.black12,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),

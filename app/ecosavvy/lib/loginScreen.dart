@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 Text(
                                   'EcoSavvy',
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 207, 45),
+                                    color: Colors.tealAccent,
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -150,12 +150,21 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             elevation: 5.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
+
                             ),
-                            color: Color.fromARGB(255, 196, 168, 65),
+                            color: Colors.black12,
                             child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.teal,
+                                  width: 3,
+                                ),
+                                borderRadius: BorderRadius.circular(30),
+
+                              ),
                               width: MediaQuery.of(context).size.width * 0.85,
                               height:
-                                  MediaQuery.of(context).size.height * 0.074,
+                                  MediaQuery.of(context).size.height * 0.078,
                               child: const Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Center(
@@ -187,7 +196,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            color: Color.fromARGB(255, 92, 244, 138),
+                            color: Colors.teal,
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.85,
                               height:

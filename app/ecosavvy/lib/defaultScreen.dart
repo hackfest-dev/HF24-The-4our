@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.lightGreenAccent,
+        selectedItemColor: Colors.tealAccent,
         unselectedItemColor: Colors.white54,
         onTap: _onItemTapped,
       ),

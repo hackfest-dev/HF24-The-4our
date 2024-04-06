@@ -124,60 +124,91 @@ class _PortfolioPageState extends State<PortfolioPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
+                        color: Color.fromARGB(255, 0, 0, 0),
                         elevation: 6,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Farm Name: ${portfolio.farm.farmName ?? ''}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            border: Border.all(
+                              color: Color.fromARGB(205, 125, 122, 128),
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(205, 0, 0, 0),
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              Container(
+
+                                padding: EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Farm Name: ${portfolio.farm.farmName ?? ''}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      '${portfolio.org.orgName}',
+                                      style: TextStyle(
+
+                                        color: Colors.white70,
+
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'No. of shares: ${portfolio.investmentDetails.noOfShares}',
+                                      style: TextStyle(
+
+                                        color: Colors.white70,
+
+                                      ),
+                                      //'${portfolio.investmentDetails.returns}',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: 20,
+                                right: 20,
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  height: 50, // Define the height
+                                  width: 100, // Define the width
+                                  child: Center(
+                                    child: Text(
+                                      '₹ ${portfolio.investmentDetails.returns.toStringAsFixed(3)}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    '${portfolio.org.orgName}',
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'No. of shares: ${portfolio.investmentDetails.noOfShares}',
-                                    //'${portfolio.investmentDetails.returns}',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              top: 20,
-                              right: 20,
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 75, 75, 75),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                height: 50, // Define the height
-                                width: 100, // Define the width
-                                child: Center(
-                                  child: Text(
-                                    '₹ ${portfolio.investmentDetails.returns.toStringAsFixed(3)}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
