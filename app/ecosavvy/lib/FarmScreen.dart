@@ -42,6 +42,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   double? farmDegradePercent;
   double? farmMaintenancePercent;
   double? currentOutput;
+  double? latestReturns;
 
   @override
   void initState() {
@@ -541,6 +542,11 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         }).toList();
 
         return processedData;
+      }
+      if (_chartData.isNotEmpty) {
+        final TimeSeriesData lastDataPoint = _chartData.last;
+        latestReturns = lastDataPoint.value * 4; // Assuming 'value' holds the energy output
+        // Remember to wrap this in a setState call if updating asynchronously
       }
 
 // Now set your state variables
