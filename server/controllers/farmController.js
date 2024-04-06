@@ -21,6 +21,9 @@ const createFarm = async (req, res, next) => {
       farmReady,
       farmExpectedReadyDate: farmExpectedReadyDateStr,
       expectedDateOfReturns: expectedDateOfReturnsStr,
+      latitude,
+      longitude,
+      imgurl,
     } = req.body;
 
     // Parse string inputs to appropriate types
@@ -32,6 +35,8 @@ const createFarm = async (req, res, next) => {
     const expectedEnergyOutput = parseFloat(expectedEnergyOutputStr);
     const farmExpectedReadyDate = new Date(farmExpectedReadyDateStr);
     const expectedDateOfReturns = new Date(expectedDateOfReturnsStr);
+    const farmApproved = false;
+    const news = [];
 
     const farmID = uuidv4();
     const totalInvestors = 0;
@@ -46,6 +51,7 @@ const createFarm = async (req, res, next) => {
     const energyPerShare = investorEnergyOutput / numberOfShares;
     const actualEnergyPerShare = energyPerShare - energyPerShare * 0.1;
     const orgEnergyOutput = orgInvestmentPercent * expectedEnergyOutput;
+    const maintenanceCostPercent = 10;
 
     const existingFarm = await Farm.findOne({
       $and: [{ farmName }, { orgId }],
@@ -92,6 +98,12 @@ const createFarm = async (req, res, next) => {
       farmReady,
       farmExpectedReadyDate,
       expectedDateOfReturns,
+      maintenanceCostPercent,
+      latitude,
+      longitude,
+      farmApproved,
+      imgurl,
+      news,
     });
 
     // Save the farm document to the database
@@ -139,11 +151,6 @@ const updateInvestorReturns = async () => {
     for (const investment of allInvestments) {
       const { farmID, noOfShares, sharePrice, timestamp } = investment;
 
-      // Calculate returns from the timestamp of investment to current date
-      const currentTime = new Date();
-      const investedPeriodInHours =
-        (currentTime - timestamp) / (1000 * 60 * 60); // Convert milliseconds to hours
-
       // Fetch all returns data for the specific farm within the invested period
       const relevantReturns = await Returns.find({
         farmID,
@@ -156,10 +163,13 @@ const updateInvestorReturns = async () => {
         totalEnergyGenerated += ret.energyGeneratedKilowattHours;
       }
 
+      // Fetch farm details to get the total number of shares
+      const farm = await Farm.findOne({ farmID });
+      const totalShares = farm.numberOfShares;
+
       // Calculate investor returns based on the energy generated and share price
-      const investorReturns =
-        (totalEnergyGenerated * sharePrice * noOfShares) /
-        investedPeriodInHours;
+      const energyPerShare = totalEnergyGenerated / totalShares;
+      const investorReturns = energyPerShare * noOfShares;
 
       // Update the returns in InvestorToFarmSchema model
       await InvestorToFarm.updateOne(

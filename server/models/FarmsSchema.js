@@ -20,7 +20,7 @@ const farmsSchema = new mongoose.Schema({
   },
   energyCategory: {
     type: String,
-    enum: ["Hydro", "Solar", "Wind", "Bio", "Thermal"],
+    enum: ["Solar", "Wind", "Bio"],
   },
   farmValuation: {
     type: Number,
@@ -114,6 +114,14 @@ const farmsSchema = new mongoose.Schema({
   },
   longitude: {
     type: String,
+    required: true,
+  },
+  imgurl: {
+    type: String,
+    required: true,
+  },
+  farmApproved: {
+    type: Boolean,
     required: true,
   },
 });
