@@ -34,6 +34,14 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   Offset _tooltipPosition = Offset.zero;
   int sharesToBuy = 0;
   bool isLoading = false;
+  late double avgEnergyOutput;
+  late double avgReturns;
+  late double highestOutput;
+  late double highestLastYear;
+  late double lowestLastYear;
+  late double farmDegradePercent;
+  late double farmMaintenancePercent;
+  late double currentOutput;
 
   @override
   void initState() {
@@ -138,47 +146,26 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            ),
+                            isVisible: false),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
                             isVisible: false),
                         series: <ChartSeries>[
-                          // ScatterSeries<TimeSeriesData, String>(
-                          //   dataSource: _chartData,
-                          //   xValueMapper: (TimeSeriesData sales, _) =>
-                          //       sales.time,
-                          //   yValueMapper: (TimeSeriesData sales, _) =>
-                          //       sales.value,
-                          //   markerSettings: MarkerSettings(
-                          //     borderWidth: 0.0,
-                          //     isVisible: true,
-                          //     color: Color.fromARGB(255, 0, 255, 247),
-                          //     width: 9,
-                          //     height: 9,
-                          //     shape: DataMarkerType.circle,
-                          //   ),
-                          //),
-                          StackedAreaSeries<TimeSeriesData, String>(
+                          ScatterSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color.fromARGB(255, 0, 255, 247).withOpacity(0.5),
-                                Color.fromARGB(255, 0, 255, 247).withOpacity(0.3),
-                                Colors.transparent,
-                              ],
+                            xValueMapper: (TimeSeriesData sales, _) =>
+                                sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) =>
+                                sales.value,
+                            markerSettings: MarkerSettings(
+                              borderWidth: 0.0,
+                              isVisible: true,
+                              color: Color.fromARGB(255, 0, 255, 247),
+                              width: 9,
+                              height: 9,
+                              shape: DataMarkerType.circle,
                             ),
-                          ),
-
-                          LineSeries<TimeSeriesData, String>(
-                            dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                            color: Color.fromARGB(255, 0, 255, 247), // Define the color for the line
                           ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
@@ -210,7 +197,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                 )),
             SizedBox(height: 20),
             TabBar(
-              indicatorColor: Color.fromARGB(255, 0, 255, 247),
+              indicatorColor: Colors.lightGreen,
               controller: _tabController,
               tabs: [
                 Tab(text: 'Details'),
@@ -226,7 +213,48 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                 },
                 children: [
                   // Details Tab
-                  Center(child: Text('Details Tab')),
+                  Center(
+                      child: // Details Tab
+                          Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Average Energy Output: ${avgEnergyOutput}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Average Returns: ${avgReturns}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Highest Output: ${highestOutput}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Highest Output Last Year: ${highestLastYear}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Lowest Output Last Year: ${lowestLastYear}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Farm Degradation Percent: ${farmDegradePercent}%',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Farm Maintenance Percent: ${farmMaintenancePercent}%',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Current Output: ${currentOutput}',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  )),
                   // News Tab
                   Center(child: Text('News Tab')),
                   // My Shares Tab
@@ -248,10 +276,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                               ),
                               SizedBox(height: 20),
                               ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-
-                                ),
                                 onPressed: () {
                                   // Navigator.push(
                                   //   context,
@@ -292,9 +316,20 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       // Parse response JSON
       Map<String, dynamic> jsonData = jsonDecode(response.body);
+      Map<String, dynamic> analyticsData = jsonData['analytics'];
       List<dynamic> rawData = jsonData['data'];
 
       List<TimeSeriesData> data = [];
+
+      avgEnergyOutput = analyticsData['avgEnergyOutput'];
+      avgReturns = analyticsData['avgReturns'];
+      highestOutput = analyticsData['highestOutput'];
+      highestLastYear = analyticsData['highestLastYear'];
+      lowestLastYear = analyticsData['lowestLastYear'];
+      farmDegradePercent = double.parse(analyticsData['farmDegradePercent']);
+      farmMaintenancePercent =
+          double.parse(analyticsData['farmMaintenancePercent']);
+      currentOutput = analyticsData['currentOutput'];
 
       // Convert JSON data to TimeSeriesData objects
       for (var item in rawData) {
@@ -406,21 +441,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         fullscreenDialog: true,
         builder: (BuildContext context) {
           return Scaffold(
-            backgroundColor: Colors.black,
             appBar: AppBar(
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              backgroundColor: Color.fromARGB(255, 0, 0, 0),
-              title: Text(
-                "Buy Shares",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              centerTitle: true,
+              title: Text('Buy Shares'),
+              backgroundColor: Colors.black,
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.all(16),
@@ -430,8 +453,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Energy Type: ${widget.farm.energytype}',
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white// Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -441,7 +465,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Number of Investors: ${widget.farm.noofinvestors}',
                     style: TextStyle(
-                      fontSize: 18, color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -451,7 +477,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Farm Valuation: ${widget.farm.farmValuation}',
                     style: TextStyle(
-                      fontSize: 18, color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -461,7 +489,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Total Investors: ${widget.farm.noofinvestors}',
                     style: TextStyle(
-                      fontSize: 18, color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -471,7 +501,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Number of Shares: ${widget.farm.numberOfShares}',
                     style: TextStyle(
-                      fontSize: 18,color: Colors.white// Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -481,7 +513,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Available Shares: ${widget.farm.availableShares}',
                     style: TextStyle(
-                      fontSize: 18,color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -491,7 +525,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Each Share Price: ${widget.farm.eachSharePrice}',
                     style: TextStyle(
-                      fontSize: 18, color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -501,7 +537,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Energy Unit: ${widget.farm.energyUnit}',
                     style: TextStyle(
-                      fontSize: 18, color: Colors.white// Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -509,9 +547,11 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                     height: 8,
                   ),
                   Text(
-                    'Energy Per Share: ${widget.farm.energyPerShare.toStringAsFixed(3)}',
+                    'Energy Per Share: ${widget.farm.energyPerShare}',
                     style: TextStyle(
-                      fontSize: 18,color: Colors.white // Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
                   ),
@@ -519,13 +559,11 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Text(
                     'Enter the number of shares to buy:',
                     style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold,// Adjust the font size as needed
-                      color: Colors.white// Optionally, make the text bold
+                      fontSize: 18, // Adjust the font size as needed
+                      fontWeight:
+                          FontWeight.bold, // Optionally, make the text bold
                       // Add more text style properties as needed
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
                   ),
                   TextField(
                     keyboardType: TextInputType.number,
@@ -534,54 +572,23 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         sharesToBuy = int.tryParse(value) ?? 0;
                       });
                     },
-                    decoration: InputDecoration(
-                      hintText: 'Enter shares to buy',
-                      hintStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(width: 2.0, color: Colors.teal),
-                      ),
-                    ),
-                    style: TextStyle(color: Colors.white),
                   ),
-
                   SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
-                          _buyShares(sharesToBuy);
-                        } else {
-                          // Handle invalid input
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.teal),
-                        // Change color as needed
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0), // Adjust the border radius here
-                          ),
-                        ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(200.0, 50.0), // Adjust the width here
-                        ),
-                      ),
-                      child: Text('Buy',style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold,// Adjust the font size as needed
-                          color: Colors.white// Optionally, make the text bold
-                        // Add more text style properties as needed
-                      ),),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (sharesToBuy > 0 &&
+                          sharesToBuy <= widget.farm.availableShares) {
+                        _buyShares(sharesToBuy);
+                      } else {
+                        // Handle invalid input
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Color.fromARGB(
+                              255, 30, 102, 12)), // Change color as needed
                     ),
-
+                    child: Text('Buy'),
                   ),
                 ],
               ),
