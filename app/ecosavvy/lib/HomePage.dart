@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecosavvy/globe_cord.dart';
 import 'package:flutter/material.dart';
 
 import 'FarmScreen.dart';
@@ -34,7 +35,17 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        leading: const Icon(Icons.electric_bolt_rounded, size: 27),
+        leading: GestureDetector(
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => MapCord(),
+            //   ),
+            // );
+          },
+          child: Icon(Icons.map, size: 27),
+        ),
         title: const Text(
           "EcoSavvy",
           style: TextStyle(
