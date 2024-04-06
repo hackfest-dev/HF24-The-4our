@@ -26,11 +26,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff252525),
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xff252525),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         leading: const Icon(Icons.electric_bolt_rounded, size: 27),
         title: const Text(
           "Invest in Energy Today!",
@@ -105,10 +105,10 @@ class OrganisationCard extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(
-              0xFF1E1E1E), // This matches the card's background color for a seamless look.
+          color: Color.fromARGB(214, 130, 163,
+              102), // This matches the card's background color for a seamless look.
           border: Border.all(
-              color: Colors.lightGreen,
+              color: const Color.fromARGB(255, 50, 71, 25),
               width: 1.2), // White border for the main card
           borderRadius: BorderRadius.circular(
               20), // Optional: Match this with your card's border radius
