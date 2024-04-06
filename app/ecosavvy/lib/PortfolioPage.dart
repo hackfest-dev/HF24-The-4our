@@ -89,8 +89,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
       body: userPortfolio.isEmpty
           ? Center(
               child:
-                  CircularProgressIndicator(), // Show a loading indicator while fetching data
-            )
+              CircularProgressIndicator(color: Colors.lightGreenAccent))
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
