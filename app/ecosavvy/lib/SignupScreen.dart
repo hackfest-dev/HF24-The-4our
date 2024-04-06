@@ -147,7 +147,6 @@ class _MyPageViewState extends State<MyPageView> {
               ),
               onPressed: () {
                 if (_pageController.page != 10) {
-
                   _pageController.nextPage(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
@@ -336,7 +335,6 @@ class _MyPageViewState extends State<MyPageView> {
       "aadharNumber": aadhar,
     };
 
-
     // Send a POST request to the server
     var url = Uri.parse('http://172.16.17.4:3000/investor/signup');
     var response = await http.post(
@@ -344,7 +342,6 @@ class _MyPageViewState extends State<MyPageView> {
       body: jsonEncode(userDataMap),
       headers: {'Content-Type': 'application/json'},
     );
-
 
     // Check if the request was successful (status code 200)
     if (response.statusCode == 201) {

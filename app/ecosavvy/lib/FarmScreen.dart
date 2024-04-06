@@ -113,21 +113,24 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         final double xPos = details.localPosition.dx;
 
                         // Calculate index of the nearest data point based on the tap position
-                        final int nearestIndex = (xPos / context.size!.width * _chartData.length).round();
+                        final int nearestIndex =
+                            (xPos / context.size!.width * _chartData.length)
+                                .round();
 
                         // Ensure that the index is within valid bounds
-                        if (nearestIndex >= 0 && nearestIndex < _chartData.length) {
-                          final TimeSeriesData dataPoint = _chartData[nearestIndex];
+                        if (nearestIndex >= 0 &&
+                            nearestIndex < _chartData.length) {
+                          final TimeSeriesData dataPoint =
+                              _chartData[nearestIndex];
 
                           // Use the energy value from the TimeSeriesData directly
                           final double energyValue = dataPoint.value;
 
                           // Use the obtained energyValue along with the time value in your tooltip or wherever it's needed
-                          showTooltip(dataPoint.time, energyValue, details.localPosition);
+                          showTooltip(dataPoint.time, energyValue,
+                              details.localPosition);
                         }
                       },
-
-
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
                         borderWidth: 0,
@@ -135,18 +138,18 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         primaryXAxis: CategoryAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false
-                        ),
+                            isVisible: false),
                         primaryYAxis: NumericAxis(
                             majorGridLines: MajorGridLines(width: 0),
                             minorGridLines: MinorGridLines(width: 0),
-                            isVisible: false
-                        ),
+                            isVisible: false),
                         series: <ChartSeries>[
                           ScatterSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
-                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
-                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            xValueMapper: (TimeSeriesData sales, _) =>
+                                sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) =>
+                                sales.value,
                             markerSettings: MarkerSettings(
                               borderWidth: 0.0,
                               isVisible: true,
@@ -166,7 +169,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                           lineDashArray: [5, 5],
                         ),
                       ),
-
                     ),
                     Positioned(
                       left: _tooltipPosition.dx - 50,
@@ -543,7 +545,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
     return prefs.getString('token');
   }
 
-  void _buyShares(int sharesToBuy) async{
+  void _buyShares(int sharesToBuy) async {
     setState(() {
       isLoading = true;
     });
@@ -601,6 +603,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         actions: [
           TextButton(
             onPressed: () {
+              Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
             child: Text('OK'),
