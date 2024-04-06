@@ -319,7 +319,6 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
   }
 }
 
-// MySharesTab widget
 class MySharesTab extends StatefulWidget {
   final Farm farm;
   final Organisation org;
@@ -332,6 +331,7 @@ class MySharesTab extends StatefulWidget {
 
 class _MySharesTabState extends State<MySharesTab> {
   int sharesToBuy = 0;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -397,7 +397,8 @@ class _MySharesTabState extends State<MySharesTab> {
           ),
           TextButton(
             onPressed: () {
-              if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
+              if (sharesToBuy > 0 &&
+                  sharesToBuy <= widget.farm.availableShares) {
                 _buyShares(sharesToBuy);
               } else {
                 // Handle invalid input
@@ -411,16 +412,21 @@ class _MySharesTabState extends State<MySharesTab> {
   }
 
   void _buyShares(int sharesToBuy) {
-    // Implement your buy shares functionality here
+    setState(() {
+      isLoading = true;
+    });
+
     String farmId = widget.farm.id;
     String transactionId = 'shiuffiufgfgsiddferrbuygsrt'; // Generate a random transaction ID
     String timestamp = DateTime.now().toIso8601String();
 
     // Send a request to the specified URL with the required attributes
     final String apiUrl = 'http://172.16.17.4:3000/investor/invest';
-    final String userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
+    final String userToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiaW52ZXN0b3IiLCJhYWRoYXJOdW1iZXIiOiJLTkZLTkJHMDAzIiwiaWF0IjoxNzEyMzQwNzAzfQ.5_cirnavbaCkWu6YDTGAe271LELEtAGMQ83yhTbQjXU';
 
-    http.post(
+    http
+        .post(
       Uri.parse(apiUrl),
       headers: {
         'Authorization': 'Bearer $userToken',
@@ -432,17 +438,61 @@ class _MySharesTabState extends State<MySharesTab> {
         'transactionID': transactionId,
         'timestamp': timestamp,
       }),
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 200) {
         // Handle success
         print('Shares bought successfully!');
+        _showSuccessDialog();
       } else {
         // Handle error
         print('Failed to buy shares: ${response.statusCode}');
+        _showFailureDialog();
       }
     }).catchError((error) {
       // Handle error
       print('Error buying shares: $error');
+      _showFailureDialog();
+    }).whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
     });
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Success'),
+        content: Text('Shares bought successfully!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFailureDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Failure'),
+        content: Text('Failed to buy shares.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 }
