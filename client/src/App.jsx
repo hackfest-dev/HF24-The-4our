@@ -17,6 +17,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminFarms from "./components/AdminFarms";
 import Profile from "./components/Profile";
 import AdminSettings from "./components/AdminSettings";
+import KYC from "./components/KYC";
+import AdminFullPageCard from "./components/AdminFullPageCard";
 
 export default function App() {
   return (
@@ -38,10 +40,12 @@ export default function App() {
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="adminfarms" element={<AdminFarms />} />
-          <Route path="adminfarms/:id" element={<FullPageCard />} />
+          <Route path="adminfarms/:id" element={<AdminFullPageCard />} />
           <Route path="approvefarms" element={<ApproveFarms />} />
           <Route path="adminsettings" element={<AdminSettings />} />
           <Route path="help" element={<Help />} />
+          <Route path="kyc" element={<KYC />} />
+
         </Route>
       </Routes>
     </Router>

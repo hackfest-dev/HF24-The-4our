@@ -5,6 +5,8 @@ import { IoMdSettings } from "react-icons/io";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { IoPerson } from "react-icons/io5";
+
 
 
 export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
@@ -25,6 +27,12 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
         label: 'Approve Farms',
         path: '/admin/approvefarms',
         icon: <FaCheck/>
+    },
+    {
+        key: 'kyc',
+        label: 'KYC',
+        path: '/admin/kyc',
+        icon: <IoPerson/>
     },
 ]
 

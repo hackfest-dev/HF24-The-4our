@@ -29,7 +29,7 @@ const AdminFarms = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-20 overflow-scroll ml-60">
       {Array.isArray(farmsData) && farmsData.length > 0 ? (
         farmsData.map((item) => (
-          <Link to={`/farms/${item.farmID}`} key={item.farmID}>
+          <Link to={`/admin/adminfarms/${item.farmID}`} key={item.farmID}>
             <FarmCard
               key={item.farmID}
               imageUrl={item.imgurl}
