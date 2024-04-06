@@ -159,11 +159,26 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                           //     shape: DataMarkerType.circle,
                           //   ),
                           //),
-                          SplineAreaSeries<TimeSeriesData, String>(
+                          StackedAreaSeries<TimeSeriesData, String>(
                             dataSource: _chartData,
                             xValueMapper: (TimeSeriesData sales, _) => sales.time,
                             yValueMapper: (TimeSeriesData sales, _) => sales.value,
-                            color: Color.fromARGB(255, 0, 255, 247).withOpacity(0.4), // Define the color for the shaded area
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromARGB(255, 0, 255, 247).withOpacity(0.5),
+                                Color.fromARGB(255, 0, 255, 247).withOpacity(0.3),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+
+                          LineSeries<TimeSeriesData, String>(
+                            dataSource: _chartData,
+                            xValueMapper: (TimeSeriesData sales, _) => sales.time,
+                            yValueMapper: (TimeSeriesData sales, _) => sales.value,
+                            color: Color.fromARGB(255, 0, 255, 247), // Define the color for the line
                           ),
                         ],
                         crosshairBehavior: CrosshairBehavior(
