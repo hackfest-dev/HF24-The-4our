@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { FARM_DATA } from '../consts/farmdata'; // Assuming FARM_DATA is imported correctly
+import React, { useState } from "react";
 
 export default function FarmForm() {
+  const apiurl = process.env.REACT_APP_API_URL;
+
   const [formData, setFormData] = useState({
-    farmID: '',
-    imageUrl: '',
-    farmName: '',
-    energyCategory: '',
-    Location: '',
+    farmID: "",
+    imgurl: "",
+    farmName: "",
+    energyCategory: "",
+    Location: "",
     news: [],
-    farmValuation: 0,
-    totalInvestors: 0,
-    numberOfShares: 0,
-    availableShares: 0,
-    eachSharePrice: 0,
+    farmValuation: null,
+    numberOfShares: null,
+    eachSharePrice: null,
+    govtSubsidy: null,
+    expectedEnergyOutput: null,
+    orgInvestment: null,
+    latitude: "",
+    longitude: "",
+    energyUnit: "",
+    farmReady: false,
+    description: "",
   });
 
   const handleInputChange = (e) => {
@@ -24,26 +31,56 @@ export default function FarmForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Append the new farm data to FARM_DATA array
-    FARM_DATA.push(formData);
-    // You can perform additional actions here, like sending data to the server
-    // or resetting the form
-    console.log('New farm added:', formData);
-    // Reset the form after submission
+
+    try {
+      // Make API call to authenticate user
+      const response = await fetch(`${apiurl}/farm/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      // Check if login was successful
+      if (response.ok) {
+        // Store token in localStorage
+        localStorage.setItem("token", data.token);
+      } else {
+        // Handle login error
+        console.error("Login failed:", data.error);
+        // Display error message to the user
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      // Display error message to the user
+    }
+
     setFormData({
-      farmID: '',
-      imageUrl: '',
-      farmName: '',
-      energyCategory: '',
-      Location: '',
+      farmID: "",
+      imgurl: "",
+      farmName: "",
+      energyCategory: "",
+      Location: "",
       news: [],
-      farmValuation: 0,
-      totalInvestors: 0,
-      numberOfShares: 0,
-      availableShares: 0,
-      eachSharePrice: 0,
+      farmValuation: null,
+      numberOfShares: null,
+      eachSharePrice: null,
+      govtSubsidy: null,
+      expectedEnergyOutput: null,
+      orgInvestment: null,
+      expectedDateOfReturns: "",
+      farmExpectedReadyDate: "",
+      latitude: "",
+      longitude: "",
+      energyUnit: "",
+      farmReady: false,
+      description: "",
     });
   };
 
@@ -53,8 +90,8 @@ export default function FarmForm() {
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="text"
-            name="imageUrl"
-            value={formData.imageUrl}
+            name="imgurl"
+            value={formData.imgurl}
             onChange={handleInputChange}
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder="Image URL"
@@ -119,33 +156,11 @@ export default function FarmForm() {
         <div className="relative z-0 w-full mb-5 group">
           <input
             type="number"
-            name="totalInvestors"
-            value={formData.totalInvestors}
-            onChange={handleInputChange}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder="Total Investors"
-            required
-          />
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <input
-            type="number"
             name="numberOfShares"
             value={formData.numberOfShares}
             onChange={handleInputChange}
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder="Number of Shares"
-            required
-          />
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <input
-            type="number"
-            name="availableShares"
-            value={formData.availableShares}
-            onChange={handleInputChange}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder="Available Shares"
             required
           />
         </div>
@@ -195,7 +210,18 @@ export default function FarmForm() {
         </div>
         <div className="relative z-0 w-full mb-5 group">
           <input
-            type="number"
+            type="text"
+            name="energyUnit"
+            value={formData.energyUnit}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Energy Unit"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="date"
             name="farmExpectedReadyDate"
             value={formData.farmExpectedReadyDate}
             onChange={handleInputChange}
@@ -206,7 +232,7 @@ export default function FarmForm() {
         </div>
         <div className="relative z-0 w-full mb-5 group">
           <input
-            type="number"
+            type="date"
             name="expectedDateOfReturns"
             value={formData.expectedDateOfReturns}
             onChange={handleInputChange}
@@ -214,6 +240,46 @@ export default function FarmForm() {
             placeholder="Farm expected date of returns"
             required
           />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="text"
+            name="latitude"
+            value={formData.latitude}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Latitude"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="text"
+            name="longitude"
+            value={formData.longitude}
+            onChange={handleInputChange}
+            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder="Longitude"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <input
+            type="checkbox"
+            id="farmReady"
+            name="farmReady"
+            checked={formData.farmReady}
+            onChange={(e) =>
+              setFormData({ ...formData, farmReady: e.target.checked })
+            }
+            className="peer h-4 w-4 border-gray-300 rounded focus:ring-blue-500 text-blue-600"
+          />
+          <label
+            htmlFor="Farm Ready"
+            className="ml-2 text-sm font-medium text-gray-700"
+          >
+            Farm Ready
+          </label>
         </div>
       </div>
       <button
