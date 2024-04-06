@@ -16,6 +16,7 @@ import AdminLayout from "./components/shared/AdminLayout";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminFarms from "./components/AdminFarms";
 import Profile from "./components/Profile";
+import AdminSettings from "./components/AdminSettings";
 
 export default function App() {
   return (
