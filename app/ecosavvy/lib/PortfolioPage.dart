@@ -20,13 +20,11 @@ class _PortfolioPageState extends State<PortfolioPage> {
   late Farm selectedFarm;
   late Organisation selectedOrg;
 
-
   @override
   void initState() {
     super.initState();
     futureOrganisations = fetchOrganisations()
-      ..then((orgs) =>
-      organisations = orgs);
+      ..then((orgs) => organisations = orgs);
     // Fetch user's portfolio data when the widget is initialized
     fetchUserPortfolio();
   }
@@ -98,7 +96,6 @@ class _PortfolioPageState extends State<PortfolioPage> {
                     onTap: () {
                       // Find the farm details based on the farmID
 
-
                       for (var org in organisations!) {
                         for (var farm in org.farms) {
                           if (farm.id == portfolio.farm.farmID) {
@@ -107,17 +104,20 @@ class _PortfolioPageState extends State<PortfolioPage> {
                             break;
                           }
                         }
-
                       }
 
                       // Navigate to farm screen and pass farm details
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FarmScreen(farm: selectedFarm, org: selectedOrg, userPortfolio: userPortfolio,),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FarmScreen(
+                            farm: selectedFarm,
+                            org: selectedOrg,
+                            userPortfolio: userPortfolio,
                           ),
-                        );
+                        ),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -158,7 +158,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
                               child: Container(
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF5803AD),
+                                  color: Color.fromARGB(255, 75, 75, 75),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
                                 height: 50, // Define the height
