@@ -8,13 +8,16 @@ const {
   approveFarm,
   approveKYC,
   getNonKYCInvestors,
+  rejectFarm,
 } = require("../controllers/adminControllers");
 
-adminRouter.post("/approvefarm", approveFarm);
+adminRouter.get("/approvefarm/:farmId", approveFarm);
+
+adminRouter.get("/rejectfarm/:farmId", rejectFarm);
 
 adminRouter.get("/getunapproved", getUnapprovedFarms);
 
-adminRouter.get("/approvekyc", approveKYC);
+adminRouter.get("/approvekyc/:aadharNumber", approveKYC);
 
 adminRouter.get("/getnonkyc", getNonKYCInvestors);
 

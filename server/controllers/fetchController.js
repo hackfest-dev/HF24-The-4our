@@ -12,7 +12,7 @@ const fetchAllOrgs = async (req, res, next) => {
     const orgsWithFarms = await Promise.all(
       orgs.map(async (org) => {
         // Find farms for the current organization
-        const farms = await Farm.find({ orgId: org.orgID });
+        const farms = await Farm.find({ orgId: org.orgID, farmApproved: true });
 
         // Return the organization object with associated farms
         return {

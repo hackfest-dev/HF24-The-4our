@@ -1,4 +1,6 @@
 const Farm = require("../models/FarmsSchema");
+const Investor = require("../models/InvestorSchema");
+const RejectedFarm = require("../models/RejectedFarmsSchema");
 
 // Controller to get unapproved farms
 const getUnapprovedFarms = async (req, res) => {
@@ -18,10 +20,10 @@ const getUnapprovedFarms = async (req, res) => {
 const approveFarm = async (req, res) => {
   try {
     // Extract farmID from request parameters
-    const { farmID } = req.params;
+    const { farmId } = req.params;
 
     // Find the farm by farmID
-    const farm = await Farm.findOne({ farmID });
+    const farm = await Farm.findOne({ farmID: farmId });
 
     // If farm not found, return 404 error
     if (!farm) {
@@ -83,9 +85,40 @@ const approveKYC = async (req, res) => {
   }
 };
 
+const rejectFarm = async (req, res) => {
+  try {
+    // Extract farmID from request parameters
+    const { farmId } = req.params;
+
+    // Find the farm by farmID
+    const farm = await Farm.findOne({ farmID: farmId });
+
+    // If farm not found, return 404 error
+    if (!farm) {
+      return res.status(404).json({ message: "Farm not found" });
+    }
+
+    // Create a new RejectedFarm document
+    const rejectedFarm = new RejectedFarm(farm.toObject());
+
+    // Save the rejected farm to the RejectedFarms schema
+    await rejectedFarm.save();
+
+    // Delete the farm from the Farms schema
+    await Farm.deleteOne({ farmID: farmId });
+
+    // Send success response
+    res.status(200).json({ message: "Farm rejected successfully" });
+  } catch (error) {
+    console.error("Error in rejecting farm:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getUnapprovedFarms,
   approveFarm,
   approveKYC,
   getNonKYCInvestors,
+  rejectFarm,
 };
