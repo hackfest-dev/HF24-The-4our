@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { FARM_DATA } from '../consts/farmdata'; // Assuming FARM_DATA is imported correctly
 
@@ -9,14 +9,38 @@ export default function FullPageCard() {
 
   const farm = FARM_DATA.find((farm) => farm.farmID === farmId);
 
+  const [farmData, setFarmData] = useState([])
+
+  async function fetchFarmData() {
+    try {
+      const response = await fetch(``,{
+        headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${localStorage.getItem(
+							'token',
+						)}`,
+					},
+      })
+      if (!response.ok) {
+					throw new Error('Failed to fetch data');
+				}
+				const data = await response.json();
+        console.log(data);
+    } catch (error) {
+      
+    }
+
+  }
+
   if (!farm) {
     // Farm not found, handle this case as needed (e.g., show a message or redirect)
     return <div>Farm not found</div>;
   }
 
   return (
-    <div className='flex'>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-80 pt-0">
+    <div className='flex flex-col mt-20'>
+    <div className='flex flex-row'>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-80 pt-0 w-5/6">
       <div>
         <div className="px-4 sm:px-0">
           <h3 className="text-base font-semibold leading-7 text-gray-900">Farm Information</h3>
@@ -40,16 +64,7 @@ export default function FullPageCard() {
               <dt className="text-sm font-medium leading-6 text-gray-900">Location</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700">{farm.Location}</dd>
             </div>
-            <div className="px-4 py-6">
-              <dt className="text-sm font-medium leading-6 text-gray-900">News</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700">
-                <ul>
-                  {farm.news.map((newsItem, index) => (
-                    <li key={index}>{newsItem}</li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
+            
           </dl>
         </div>
       </div>
@@ -84,15 +99,20 @@ export default function FullPageCard() {
         </div>
       </div>
     </div>
+    
+    <div className='flex flex-col w-1/2 pl-20'>
+    {farm.news.map((newsItem) => (
+        <div key={newsItem.id} className="w-1/2 bg-white rounded-xl shadow-md overflow-hidden m-5">
+          <div className="p-8">
+            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{newsItem}</div>
+          </div>
+        </div>
 
-    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5">
-    <div class="p-8">
-        <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Event Name</div>
-        <p class="block mt-1 text-lg leading-tight font-medium text-black">Event Date</p>
-        <p class="mt-2 text-gray-500">Event Description</p>
-        <p class="mt-2 text-gray-500">Event Details...</p>
+    ))}
+    </div>
+    
     </div>
     </div>
-    </div>
+
   );
 }
