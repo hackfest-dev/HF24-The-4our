@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecosavvy/defaultScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -114,6 +115,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +131,18 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                         height: 6,
                       ),
                       Text(
-                        style: TextStyle(fontSize: 20),
-                        '${currentOutput?.toStringAsFixed(2) ?? 'Loading...'}kWH',
+                        style: TextStyle(fontSize: 16),
+                        '${currentOutput?.toStringAsFixed(2) ?? 'Loading...'} kWH',
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      Text(
+                        style: TextStyle(fontSize: 22, color: Colors.tealAccent, fontWeight: FontWeight.bold),
+                        '+ ₹${latestReturns?.toStringAsFixed(2) ?? 'Loading...'}',
                       ),
                     ],
                   ),
@@ -489,6 +501,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                                   //   ),
                                   // );
                                   _showBuyDialog();
+
                                 },
                                 child: const Text('Buy'),
                               ),
@@ -543,11 +556,7 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
 
         return processedData;
       }
-      if (_chartData.isNotEmpty) {
-        final TimeSeriesData lastDataPoint = _chartData.last;
-        latestReturns = lastDataPoint.value * 4; // Assuming 'value' holds the energy output
-        // Remember to wrap this in a setState call if updating asynchronously
-      }
+
 
 // Now set your state variables
       setState(() {
@@ -578,7 +587,11 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
             ? (analyticsData['currentOutput'] as int).toDouble()
             : analyticsData['currentOutput'];
 
+         // Assuming 'value' holds the energy output
+          // Remember to wrap this in a setState call if updating asynchronously
         _chartData = processData(data);
+        final TimeSeriesData lastDataPoint = _chartData.last;
+        latestReturns = lastDataPoint.value * 4;
         _updateMaxYValue(_chartData); // Update maximum Y value
         _updateXAxisOptions(
             _selectedTimeOption); // Update X-axis options based on selected time option
@@ -829,9 +842,9 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (sharesToBuy > 0 &&
-                            sharesToBuy <= widget.farm.availableShares) {
-                          _buyShares(sharesToBuy);
+                        if (sharesToBuy > 0 && sharesToBuy <= widget.farm.availableShares) {
+                          int totalPrice = sharesToBuy * widget.farm.eachSharePrice;
+                          _showConfirmationDialog(totalPrice); // New method to show confirmation dialog
                         } else {
                           // Handle invalid input
                         }
@@ -870,6 +883,30 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
           );
         },
       ),
+    );
+  }
+  void _showConfirmationDialog(int totalPrice) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm Purchase"),
+          content: Text("Total amount to be paid: ₹${totalPrice.toStringAsFixed(2)}"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Close the dialog
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the confirmation dialog
+                _buyShares(sharesToBuy); // Proceed to buy shares
+              },
+              child: Text("Confirm"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -937,8 +974,10 @@ class _FarmScreenState extends State<FarmScreen> with TickerProviderStateMixin {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()), // Replace with your HomeScreen widget
+              );
             },
             child: const Text('OK'),
           ),

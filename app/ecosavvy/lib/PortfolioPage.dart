@@ -89,7 +89,13 @@ class _PortfolioPageState extends State<PortfolioPage> {
       body: userPortfolio.isEmpty
           ? Center(
               child:
-              CircularProgressIndicator(color: Colors.lightGreenAccent))
+              Text("Start Investing Today!",
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                ),
+              ))
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,13 +155,12 @@ class _PortfolioPageState extends State<PortfolioPage> {
                           child: Stack(
                             children: [
                               Container(
-
                                 padding: EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Farm Name: ${portfolio.farm.farmName ?? ''}',
+                                      '${portfolio.farm.farmName ?? ''}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,

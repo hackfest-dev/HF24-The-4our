@@ -188,22 +188,23 @@ class OrganisationFarm {
       eachSharePrice: json['eachSharePrice'],
       govtSubsidy: json['govtSubsidy'],
       orgInvestment: json['orgInvestment'],
-      orgInvestmentPercent: json['orgInvestmentPercent'],
+      orgInvestmentPercent: (json['orgInvestmentPercent'] is int) ? (json['orgInvestmentPercent'] as int).toDouble() : json['orgInvestmentPercent'],
       expectedEnergyOutput: json['expectedEnergyOutput'],
       energyUnit: json['energyUnit'],
       description: json['description'],
-      govtEquityPercent: json['govtEquityPercent'],
-      govtEnergyOutput: json['govtEnergyOutput'],
-      investorEquityPercent: json['investorEquityPercent'],
-      investorEnergyOutput: json['investorEnergyOutput'],
-      energyPerShare: json['energyPerShare'],
-      orgEnergyOutput: json['orgEnergyOutput'],
+      govtEquityPercent: (json['govtEquityPercent'] is int) ? (json['govtEquityPercent'] as int).toDouble() : json['govtEquityPercent'],
+      govtEnergyOutput: (json['govtEnergyOutput'] is int) ? (json['govtEnergyOutput'] as int).toDouble() : json['govtEnergyOutput'],
+      investorEquityPercent: (json['investorEquityPercent'] is int) ? (json['investorEquityPercent'] as int).toDouble() : json['investorEquityPercent'],
+      investorEnergyOutput: (json['investorEnergyOutput'] is int) ? (json['investorEnergyOutput'] as int).toDouble() : json['investorEnergyOutput'],
+      energyPerShare: (json['energyPerShare'] is int) ? (json['energyPerShare'] as int).toDouble() : json['energyPerShare'],
+      orgEnergyOutput: (json['orgEnergyOutput'] is int) ? (json['orgEnergyOutput'] as int).toDouble() : json['orgEnergyOutput'],
       farmReady: json['farmReady'],
       farmExpectedReadyDate: json['farmExpectedReadyDate'],
       expectedDateOfReturns: json['expectedDateOfReturns'],
     );
   }
 }
+
 
 class SimpleOrganisationFarm {
   final String? farmName;
