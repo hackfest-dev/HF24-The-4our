@@ -14,4 +14,6 @@ fetchRouter.get("/getallfarms", fetchAllFarms);
 
 fetchRouter.get("/:farmID/returns", fetchFarmReturns);
 
+fetchRouter.get("/farm/:farmId");
+
 module.exports = fetchRouter;
