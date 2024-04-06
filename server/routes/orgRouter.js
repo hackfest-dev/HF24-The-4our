@@ -10,7 +10,7 @@ const {
   getAllFarmsOfOrganization,
 } = require("../controllers/orgControllers");
 
-orgRouter.post("/signup", upload, attachFileLinks, orgSignUp);
+orgRouter.post("/signup", upload, orgSignUp);
 
 orgRouter.post("/login", orgLogin);
 
