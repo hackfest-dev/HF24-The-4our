@@ -1,35 +1,50 @@
-import React, { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import React, { useState } from 'react'
 
-const LiveGraph = () => {
-  const [data, setData] = useState([]);
+export default function LiveGraph() {
 
-  // Simulating live data update every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Generate random data point
-      const newDataPoint = {
-        time: new Date().toLocaleTimeString(), // x-axis value (time)
-        value: Math.random() * 100, // y-axis value (random value for example)
-      };
+  const apiurl = process.env.REACT_APP_API_URL;
 
-      // Update data with the new data point
-      setData((prevData) => [...prevData, newDataPoint]);
-    }, 1000);
+  const [allFarms, setAllFarms] = useState([])
 
-    return () => clearInterval(interval); // Clean up interval on unmount
-  }, []);
+  const getAllFarms = async() => {
+    const response = await fetch(`${apiurl}/fetch/getallfarms`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      setAllFarms(data)
+  }
+
+  useState(() => {
+    getAllFarms()
+    const farmsData = allFarms.forEach(async(farm) => {
+          const response = await fetch(`${apiurl}/fetch/${farm.farmID}/returns`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      console.log(data)
+      return data
+    })
+
+    console.log(farmsData)
+  }, [])
+
+
+
+
 
   return (
-    <LineChart width={600} height={400} data={data} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="time" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
-    </LineChart>
-  );
-};
-
-export default LiveGraph;
+    <div>LiveGraph</div>
+  )
+}

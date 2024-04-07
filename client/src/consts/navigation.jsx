@@ -20,7 +20,7 @@ export const ADMIN_DASHBOARD_SIDEBAR_LINKS = [
     },
     {
         key: 'adminfarms',
-        label: 'Admin Farms',
+        label: 'All Farms',
         path: '/admin/adminfarms',
         icon: <TbSolarPanel2/>
     },
