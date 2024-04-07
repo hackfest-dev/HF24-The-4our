@@ -20,6 +20,7 @@ import AdminSettings from "./components/AdminSettings";
 import KYC from "./components/KYC";
 import AdminFullPageCard from "./components/AdminFullPageCard";
 import Home from "./components/Home"
+import FarmAnalytics from "./components/FarmAnalytics";
 
 export default function App() {
   return (
@@ -35,9 +36,11 @@ export default function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="help" element={<Help />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="dummy" element={<FarmAnalytics />} />
         </Route>
         <Route path="signup" element={<SignupForm />} />
         <Route path="adminlogin" element={<AdminLoginForm />} />
+
 
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
